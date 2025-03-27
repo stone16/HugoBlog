@@ -2,6 +2,7 @@
 title: "氛围编程 vibe coding"
 date: 2025-03-27T03:18:09.836Z
 draft: false
+categories: ["Coding"]
 tags: ["AgentAI", "projectDevelopment"]
 ---
 
