@@ -7,13 +7,18 @@ params:
   description: "A personal blog about technology, coding, and more"
   author: "Stometa"
   # Show full content instead of summary
-  showFullContent: false
+  showFullContent: true
+  
+  showBreadCrumbs: true
+
   # Show Table of Contents
   showToc: true
+  tocOpen: true
+
   # Show post reading time
   showReadingTime: true
   # Show post word count
-  showWordCount: true
+  showWordCount: false
   # Show share buttons
   showShareButtons: true
   # Comments system (we'll configure this later)
@@ -58,10 +63,14 @@ menu:
       name: "Tags"
       url: "/tags/"
       weight: 40
+    # - identifier: "archive"
+    #   name: "Archive"
+    #   url: "/archive/"
+      weight: 50
     - identifier: "about"
       name: "About"
       url: "/about/"
-      weight: 50
+      weight: 60
 
 # Taxonomies
 taxonomies:
@@ -86,3 +95,26 @@ build:
 caches:
   images:
     dir: :cacheDir/images
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
+  section:
+  
+
+params:
+  profileMode:
+    enabled: true
+    title: "Stometa's Blog" # optional default will be site title
+    subtitle: "Blogs about technology, coding, and my life"
+    # imageUrl: "<image link>" # optional
+    # imageTitle: "<title of image as alt>" # optional
+    imageWidth: 120 # custom size
+    imageHeight: 120 # custom size
+    buttons:
+      - name: Posts
+        url: "/posts/"
+      - name: About Me
+        url: "/about/"
