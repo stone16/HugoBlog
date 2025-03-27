@@ -82,3 +82,7 @@ markup:
 # Build options
 build:
   useResourceCacheWhen: always
+
+caches:
+  images:
+    dir: :cacheDir/images

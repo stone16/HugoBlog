@@ -47,13 +47,32 @@ If needed, you can further use the `web_scraper.py` file to scrape the web page 
 - Enable user comments
 
 ### Plan:
-[ ] Initialize a new Hugo site
-[ ] Choose and configure a suitable theme
-[ ] Set up basic site structure and configuration
-[ ] Configure for GitHub Pages deployment
-[ ] Add analytics integration
-[ ] Add commenting system
-[ ] Set up custom domain configuration
-[ ] Create sample content
-[ ] Test locally
-[ ] Push to GitHub repository
+[X] Initialize a new Hugo site
+[X] Choose and configure a suitable theme
+[X] Set up basic site structure and configuration
+[X] Configure for GitHub Pages deployment
+[X] Add analytics integration (Google Analytics)
+[X] Add commenting system (Disqus)
+[X] Set up custom domain configuration (CNAME)
+[X] Create sample content
+[X] Test locally
+[X] Push to GitHub repository
+
+### Progress:
+- Created a new Hugo site called "stometa-blog"
+- Installed the PaperMod theme
+- Configured the site with the user's personal details
+- Created basic content structure (about page and first post)
+- Set up GitHub Actions workflow for automatic deployment
+- Added CNAME file for custom domain configuration
+- Integrated Disqus for comments
+- Added Google Analytics template
+- Created a README file for the repository
+- Tested the site locally (running on http://localhost:1313)
+- Pushed the site to GitHub repository: git@github.com:stone16/HugoBlog.git
+
+### Next Steps for the User:
+1. Go to GitHub repository settings and enable GitHub Pages
+2. Configure DNS for custom domain (stometa.top) to point to GitHub Pages
+3. Set up a Disqus account and update the shortname in layouts/partials/comments.html
+4. Set up Google Analytics and update the measurement ID in layouts/partials/analytics.html

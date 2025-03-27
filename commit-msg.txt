@@ -1,5 +1,0 @@
-[Cursor] Fix GitHub Actions workflow and update config instructions
-
-- Update GitHub Actions workflow to use latest actions versions
-- Clarify instructions for Disqus configuration
-- Clarify instructions for Google Analytics configuration 
