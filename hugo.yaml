@@ -58,6 +58,7 @@ params:
     enable: true
     domain: "stometa.top"
 
+
 # Menu items
 menu:
   main:
