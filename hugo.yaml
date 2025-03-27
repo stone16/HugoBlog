@@ -1,7 +1,7 @@
 baseURL: "https://stometa.top"
 languageCode: "en-us"
 title: "Stometa's Blog"
-theme: "PaperMod"
+theme: ["PaperMod", "plausible-hugo"]
 
 params:
   description: "A personal blog about technology, coding, and more"
@@ -53,6 +53,10 @@ params:
   analytics:
     google:
       SiteVerificationTag: ""
+
+  plausible:
+    enable: true
+    domain: "stometa.top"
 
 # Menu items
 menu:
