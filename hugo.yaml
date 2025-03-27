@@ -8,20 +8,17 @@ params:
   author: "Stometa"
   # Show full content instead of summary
   showFullContent: true
-  
   showBreadCrumbs: true
-
   # Show Table of Contents
   showToc: true
   tocOpen: true
-
   # Show post reading time
   showReadingTime: true
   # Show post word count
   showWordCount: false
   # Show share buttons
   showShareButtons: true
-  # Comments system (we'll configure this later)
+  # Comments system
   comments: true
   # Default theme (auto, light, dark)
   defaultTheme: auto
@@ -32,6 +29,19 @@ params:
   # Enable emoji support
   enableEmoji: true
 
+  # Profile Mode Settings
+  profileMode:
+    enabled: true
+    title: "Stometa's Blog" # optional default will be site title
+    subtitle: "Blogs about technology, coding, and my life"
+    imageWidth: 120 # custom size
+    imageHeight: 120 # custom size
+    buttons:
+      - name: Posts
+        url: "/posts/"
+      - name: About Me
+        url: "/about/"
+
   # Social links
   socialIcons:
     - name: "github"
@@ -39,7 +49,7 @@ params:
     - name: "linkedin"
       url: "https://www.linkedin.com/in/leilei-chen-837870b4/"
 
-  # Analytics (we'll configure this later)
+  # Analytics
   analytics:
     google:
       SiteVerificationTag: ""
@@ -97,20 +107,3 @@ outputs:
     - HTML
     - RSS
     - JSON
-  section:
-  
-
-params:
-  profileMode:
-    enabled: true
-    title: "Stometa's Blog" # optional default will be site title
-    subtitle: "Blogs about technology, coding, and my life"
-    # imageUrl: "<image link>" # optional
-    # imageTitle: "<title of image as alt>" # optional
-    imageWidth: 120 # custom size
-    imageHeight: 120 # custom size
-    buttons:
-      - name: Posts
-        url: "/posts/"
-      - name: About Me
-        url: "/about/"

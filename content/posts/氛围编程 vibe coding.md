@@ -1,8 +1,9 @@
 ---
-title: "氛围编程 vibe coding"
-date: 2025-03-27T03:18:09.836Z
+title: "氛围编程 (Vibe Coding)"
+date: 2024-03-27
 draft: false
-categories: ["Coding"]
+slug: "vibe-coding"
+categories: ["Programming"]
 tags: ["AgentAI", "projectDevelopment"]
 ---
 
