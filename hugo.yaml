@@ -63,14 +63,10 @@ menu:
       name: "Tags"
       url: "/tags/"
       weight: 40
-    # - identifier: "archive"
-    #   name: "Archive"
-    #   url: "/archive/"
-      weight: 50
     - identifier: "about"
       name: "About"
       url: "/about/"
-      weight: 60
+      weight: 50
 
 # Taxonomies
 taxonomies:
