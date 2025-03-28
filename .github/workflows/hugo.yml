@@ -47,6 +47,12 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
+      - name: Update theme submodules
+        run: |
+          git submodule update --init --recursive
+          cd themes/PaperMod
+          git checkout master
+          cd ../..
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
