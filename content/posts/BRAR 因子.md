@@ -61,4 +61,4 @@ def signal(df, n, factor_name):
 这里其实还是做了一个简化的，对BRAR 进行量纲的消除，方便后期处理
 # References
 
-![IC](/images/posts/ic.png)
+!Pasted image 20250328113551.png
