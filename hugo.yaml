@@ -28,19 +28,11 @@ params:
   enableArchive: true
   # Enable emoji support
   enableEmoji: true
-
-  # Profile Mode Settings
-  profileMode:
-    enabled: true
-    title: "Stometa's Blog" # optional default will be site title
-    subtitle: "Blogs about technology, coding, and my life"
-    imageWidth: 120 # custom size
-    imageHeight: 120 # custom size
-    buttons:
-      - name: Posts
-        url: "/posts/"
-      - name: About Me
-        url: "/about/"
+  showShareButtons: true
+  
+  homeInfoParams:
+    Title: "Stometa's Blog"
+    Content: "Blogs about technology, coding, and my life"
 
   # Social links
   socialIcons:
