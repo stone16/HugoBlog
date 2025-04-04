@@ -1,5 +1,5 @@
 <!-- Disqus comments -->
-<div id="disqus_thread"></div>
+<!-- <div id="disqus_thread"></div>
 <script>
     var disqus_config = function () {
         this.page.url = "{{ .Permalink }}";
@@ -11,5 +11,15 @@
         s.setAttribute('data-timestamp', +new Date());
         (d.head || d.body).appendChild(s);
     })();
-</script>
+</script> -->
+
+<div id="cusdis_thread"
+  data-host="https://cusdis.com"
+  data-app-id="479b2649-0d7a-42ca-ba6a-cb070f0421a2"
+  data-page-id="{{ .File.ContentBaseName }}"
+  data-page-url="{{ .Permalink }}"
+  data-page-title="{{ .Title }}"
+></div>
+<script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
+
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript> 
