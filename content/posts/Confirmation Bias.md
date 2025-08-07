@@ -1,5 +1,5 @@
 ---
-title: "/Users/stometa/dev/hugoBlog/stometa-blog/content/posts/Confirmation Bias"
+title: "Confirmation Bias"
 date: 2025-02-02
 draft: false
 categories: ['General']

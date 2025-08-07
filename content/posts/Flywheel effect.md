@@ -1,5 +1,5 @@
 ---
-title: "/Users/stometa/dev/hugoBlog/stometa-blog/content/posts/Flywheel effect"
+title: "Flywheel effect"
 date: 2025-02-10
 draft: false
 categories: ['General']

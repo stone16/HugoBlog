@@ -1,5 +1,5 @@
 ---
-title: "/Users/stometa/dev/hugoBlog/stometa-blog/content/posts/氛围编程 vibe coding"
+title: "氛围编程 vibe coding"
 date: 2025-03-27
 draft: false
 categories: ['General']
