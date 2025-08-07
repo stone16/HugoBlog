@@ -1,5 +1,5 @@
 ---
-title: "BRAR 因子"
+title: "/Users/stometa/dev/hugoBlog/stometa-blog/content/posts/BRAR 因子"
 date: 2025-03-04
 draft: false
 categories: ['Quant']
