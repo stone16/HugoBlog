@@ -1,1 +1,486 @@
-// Custom styles can be added here
+/* ============================================
+   V1: TERMINAL DARK HACKER AESTHETIC
+   "This person writes code at 2am and ships things."
+   ============================================ */
+
+/* ── CSS Variables ── */
+:root {
+  --accent: #00d4aa;
+  --accent-glow: rgba(0, 212, 170, 0.3);
+  --accent-dim: rgba(0, 212, 170, 0.15);
+  --theme: #0a0a0a;
+  --surface: #111111;
+  --surface-hover: #1a1a1a;
+  --border: #222222;
+  --text-primary: #e0e0e0;
+  --text-secondary: #888888;
+  --text-muted: #555555;
+  --code-bg: #0d1117;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ── Force Dark Mode ── */
+body, body.dark, body:not(.dark) {
+  --theme: #0a0a0a;
+  --entry: #111111;
+  --primary: #e0e0e0;
+  --secondary: #888888;
+  --tertiary: #555555;
+  --content: #d0d0d0;
+  --hljs-bg: #0d1117;
+  --code-bg: #0d1117;
+  --border: #222222;
+  background: #0a0a0a;
+  color: #e0e0e0;
+  font-family: var(--font-body);
+}
+
+/* Hide theme toggle — dark only */
+#theme-toggle, .theme-toggle {
+  display: none !important;
+}
+
+/* ── Scanline Overlay ── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 212, 170, 0.015) 2px,
+    rgba(0, 212, 170, 0.015) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* ── Header / Navigation ── */
+.nav {
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+#menu a {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  color: var(--text-secondary);
+  transition: color 0.2s, text-shadow 0.2s;
+}
+
+#menu a:hover,
+#menu a.active {
+  color: var(--accent);
+  text-shadow: 0 0 8px var(--accent-glow);
+}
+
+/* Blinking cursor after logo */
+.logo a::after {
+  content: '▌';
+  color: var(--accent);
+  animation: blink 1s step-end infinite;
+  margin-left: 2px;
+  font-weight: 400;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ── Terminal Hero (Homepage) ── */
+.terminal-hero {
+  max-width: 720px;
+  margin: 3rem auto 2rem;
+  padding: 0 1rem;
+}
+
+.terminal-window {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+.terminal-titlebar {
+  background: #1a1a1a;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border-bottom: 1px solid var(--border);
+}
+
+.terminal-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+.terminal-dot.red { background: #ff5f57; }
+.terminal-dot.yellow { background: #febc2e; }
+.terminal-dot.green { background: #28c840; }
+
+.terminal-title {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-left: 8px;
+}
+
+.terminal-body {
+  padding: 1.25rem 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.terminal-line {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.terminal-prompt {
+  color: var(--accent);
+  font-weight: 600;
+  user-select: none;
+}
+
+.terminal-command {
+  color: #ffffff;
+}
+
+.terminal-output {
+  color: var(--text-secondary);
+  padding-left: 1.2rem;
+}
+
+.terminal-output.highlight-text {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.terminal-blank {
+  height: 0.6rem;
+}
+
+/* Typewriter animation */
+.typewriter {
+  color: #ffffff;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid var(--accent);
+  width: 0;
+  animation: typing 2s steps(20) 1s forwards, blinkCaret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 18ch; }
+}
+
+@keyframes blinkCaret {
+  0%, 100% { border-color: var(--accent); }
+  50% { border-color: transparent; }
+}
+
+/* Social icons under terminal */
+.terminal-social {
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.terminal-social a {
+  color: var(--text-muted);
+  transition: color 0.2s, transform 0.2s;
+}
+
+.terminal-social a:hover {
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.terminal-social svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* ── Posts Section ── */
+.posts-section-title {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  max-width: 720px;
+  margin: 2rem auto 1rem;
+  padding: 0 1rem;
+}
+
+.posts-section-title::before {
+  content: '> ';
+  color: var(--text-muted);
+}
+
+/* ── Post Entry Cards ── */
+.post-entry {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  border-left: 3px solid transparent;
+  transition: border-color 0.2s, background 0.2s, transform 0.2s;
+}
+
+.post-entry:hover {
+  border-left-color: var(--accent);
+  background: var(--surface-hover);
+  transform: translateX(3px);
+}
+
+.first-entry {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 6px;
+}
+
+.entry-header h2 {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.entry-content p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.entry-footer {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+/* ── Single Post ── */
+.post-title {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.post-content {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--text-primary);
+}
+
+.post-content h1, .post-content h2, .post-content h3,
+.post-content h4, .post-content h5, .post-content h6 {
+  font-family: var(--font-mono);
+  color: #ffffff;
+  margin-top: 2rem;
+}
+
+.post-content a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: text-shadow 0.2s;
+}
+
+.post-content a:hover {
+  text-shadow: 0 0 6px var(--accent-glow);
+}
+
+.post-content blockquote {
+  border-left: 3px solid var(--accent);
+  background: var(--accent-dim);
+  padding: 0.75rem 1.25rem;
+  border-radius: 0 4px 4px 0;
+  color: var(--text-primary);
+}
+
+/* ── Code Blocks — Terminal Chrome ── */
+.highlight pre,
+pre {
+  background: var(--code-bg) !important;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  padding-top: 2.5rem;
+  position: relative;
+  overflow-x: auto;
+}
+
+/* Traffic light dots */
+.highlight pre::before,
+pre::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ff5f57;
+  box-shadow: 16px 0 0 #febc2e, 32px 0 0 #28c840;
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+}
+
+/* Inline code */
+:not(pre) > code {
+  background: var(--accent-dim);
+  color: var(--accent);
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+  font-size: 0.88em;
+}
+
+/* ── Table of Contents ── */
+.toc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1rem;
+}
+
+.toc a {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  transition: color 0.2s;
+}
+
+.toc a:hover {
+  color: var(--accent);
+}
+
+/* ── Tags ── */
+.post-tags a {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  background: var(--accent-dim);
+  color: var(--accent);
+  padding: 0.25em 0.6em;
+  border-radius: 3px;
+  transition: background 0.2s;
+}
+
+.post-tags a::before {
+  content: '#';
+}
+
+.post-tags a:hover {
+  background: var(--accent-glow);
+}
+
+/* ── Pagination ── */
+.pagination {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+.pagination a {
+  color: var(--text-secondary);
+  transition: color 0.2s;
+}
+
+.pagination a:hover {
+  color: var(--accent);
+}
+
+/* ── Search ── */
+#searchbox input {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  transition: border-color 0.2s;
+}
+
+#searchbox input:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent-dim);
+}
+
+/* ── Footer ── */
+.footer {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+}
+
+/* ── Images ── */
+.post-content img {
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+
+/* ── Selection ── */
+::selection {
+  background: var(--accent);
+  color: #0a0a0a;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .terminal-hero {
+    margin-top: 2rem;
+  }
+
+  .terminal-body {
+    font-size: 0.8rem;
+    padding: 1rem;
+  }
+
+  .entry-header h2 {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .terminal-body {
+    font-size: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .terminal-title {
+    display: none;
+  }
+}
