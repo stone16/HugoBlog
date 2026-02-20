@@ -1,19 +1,50 @@
-{{- /* V1: Terminal Dark Hacker Aesthetic — Google Fonts + Preconnect */ -}}
+{{- /* V3: AI Editorial — Fonts + Analytics */ -}}
 
-{{- /* Preconnect for faster font loading */ -}}
+{{- /* Preconnect */ -}}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-{{- /* JetBrains Mono (headings + code), Inter (body text) */ -}}
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+{{- /* Plus Jakarta Sans (headings) + Inter (body) + JetBrains Mono (code) */ -}}
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-{{- /* Force dark mode on page load to prevent flash */ -}}
-<script>document.documentElement.classList.add('dark');</script>
+{{- /* Force dark on page load, prevent flash */ -}}
+<script>
+  document.documentElement.classList.add('dark');
+  document.documentElement.setAttribute('data-theme', 'dark');
+</script>
 
-{{- /* Terminal green theme color for mobile browsers */ -}}
-<meta name="theme-color" content="#0a0a0a">
+{{- /* Theme meta */ -}}
+<meta name="theme-color" content="#08080f">
 <meta name="color-scheme" content="dark">
 
-{{- /* Plausible Analytics */ -}}
-<script defer data-domain="stometa.top" src="https://plausible.io/js/script.file-downloads.hash.outbound-links.pageview-props.tagged-events.js"></script>
+{{- /* Plausible Analytics — privacy-first */ -}}
+<script defer data-domain="{{ site.Params.plausible.domain | default site.BaseURL }}"
+  src="https://plausible.io/js/script.file-downloads.hash.outbound-links.pageview-props.tagged-events.js"></script>
 <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+
+{{- /* Google Analytics 4 — uncomment and fill in your Measurement ID */ -}}
+{{- /* Replace G-XXXXXXXXXX with your GA4 Measurement ID from analytics.google.com */ -}}
+{{- with site.Params.googleAnalytics }}
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ . }}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '{{ . }}');
+</script>
+{{- end }}
+
+{{- /* Structured Data — Blog */ -}}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "{{ site.Title }}",
+  "url": "{{ site.BaseURL }}",
+  "description": "{{ site.Params.description }}",
+  "author": {
+    "@type": "Person",
+    "name": "{{ site.Params.author }}"
+  }
+}
+</script>

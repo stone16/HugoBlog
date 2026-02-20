@@ -1,26 +1,38 @@
-{{- /* Giscus Comments — GitHub Discussions powered */}}
+{{- /* Giscus Comments — GitHub Discussions powered
+     Setup checklist (one-time):
+     1. Go to github.com/stone16/HugoBlog → Settings → Features → enable Discussions
+     2. Visit https://giscus.app, select your repo, get data-category-id
+     3. Paste data-category-id below and uncomment the script
+*/ -}}
+
 <div class="comments-section">
-  <div class="comments-section-title">Comments</div>
+  <div class="comments-header">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent-1)">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+    </svg>
+    <span class="comments-title">Discussion</span>
+  </div>
 
   <script src="https://giscus.app/client.js"
     data-repo="stone16/HugoBlog"
     data-repo-id="R_kgDOOPX8ww"
     data-category="General"
-    data-category-id="DIC_kwDOOPX8w84C20e4"
+    data-category-id="REPLACE_WITH_CATEGORY_ID"
     data-mapping="pathname"
     data-strict="0"
     data-reactions-enabled="1"
     data-emit-metadata="0"
     data-input-position="top"
-    data-theme="noborder_dark"
-    data-lang="en"
+    data-theme="transparent_dark"
+    data-lang="zh-CN"
     data-loading="lazy"
     crossorigin="anonymous"
     async>
   </script>
 
   <noscript>
-    Comments powered by <a href="https://giscus.app" target="_blank" rel="noopener">Giscus</a>.
-    Please enable JavaScript to view comments.
+    <p style="color: var(--text-muted); font-size: 0.875rem;">
+      Please enable JavaScript to view comments.
+    </p>
   </noscript>
 </div>

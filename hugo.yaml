@@ -30,6 +30,10 @@ params:
     - name: "linkedin"
       url: "https://www.linkedin.com/in/leilei-chen-837870b4/"
 
+  # Google Analytics 4 — fill in your Measurement ID (G-XXXXXXXXXX)
+  # Get it from: analytics.google.com → Admin → Data Streams
+  googleAnalytics: ""   # e.g. "G-ABC123XYZ"
+
   analytics:
     google:
       SiteVerificationTag: ""
