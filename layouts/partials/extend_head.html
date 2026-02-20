@@ -1,10 +1,19 @@
-{{- /* Head custom content area start */ -}}
-{{- /* Insert any custom code (web-analytics, resources, etc.) - it will appear in the <head></head> section of every page. */ -}}
-{{- /* Can be overwritten by partial with the same name in the global layouts. */ -}}
-{{- /* Head custom content area end */ -}}
+{{- /* V1: Terminal Dark Hacker Aesthetic — Google Fonts + Preconnect */ -}}
 
-{{- /* Add Plausible Analytics */ -}}
-<!-- {{ partial "plausible_head.html" . }}  -->
+{{- /* Preconnect for faster font loading */ -}}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
+{{- /* JetBrains Mono (headings + code), Inter (body text) */ -}}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+{{- /* Force dark mode on page load to prevent flash */ -}}
+<script>document.documentElement.classList.add('dark');</script>
+
+{{- /* Terminal green theme color for mobile browsers */ -}}
+<meta name="theme-color" content="#0a0a0a">
+<meta name="color-scheme" content="dark">
+
+{{- /* Plausible Analytics */ -}}
 <script defer data-domain="stometa.top" src="https://plausible.io/js/script.file-downloads.hash.outbound-links.pageview-props.tagged-events.js"></script>
 <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>

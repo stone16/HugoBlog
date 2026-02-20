@@ -1,25 +1,26 @@
-<!-- Disqus comments -->
-<!-- <div id="disqus_thread"></div>
-<script>
-    var disqus_config = function () {
-        this.page.url = "{{ .Permalink }}";
-        this.page.identifier = "{{ .File.ContentBaseName }}";
-    };
-    (function() {
-        var d = document, s = d.createElement('script');
-        s.src = 'https://leilei-blog.disqus.com/embed.js';  // IMPORTANT: Replace 'YOUR-DISQUS-SHORTNAME' with your actual Disqus shortname after creating an account at disqus.com
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script> -->
+{{- /* Giscus Comments — GitHub Discussions powered */}}
+<div class="comments-section">
+  <div class="comments-section-title">Comments</div>
 
-<div id="cusdis_thread"
-  data-host="https://cusdis.com"
-  data-app-id="479b2649-0d7a-42ca-ba6a-cb070f0421a2"
-  data-page-id="{{ .File.ContentBaseName }}"
-  data-page-url="{{ .Permalink }}"
-  data-page-title="{{ .Title }}"
-></div>
-<script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
+  <script src="https://giscus.app/client.js"
+    data-repo="stone16/HugoBlog"
+    data-repo-id="R_kgDOOPX8ww"
+    data-category="General"
+    data-category-id="DIC_kwDOOPX8w84C20e4"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="noborder_dark"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
 
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript> 
+  <noscript>
+    Comments powered by <a href="https://giscus.app" target="_blank" rel="noopener">Giscus</a>.
+    Please enable JavaScript to view comments.
+  </noscript>
+</div>

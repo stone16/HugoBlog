@@ -6,42 +6,30 @@ theme: ["PaperMod", "plausible-hugo"]
 params:
   description: "A personal blog about technology, coding, and more"
   author: "Stometa"
-  # Show full content instead of summary
   showFullContent: true
   showBreadCrumbs: true
-  # Show Table of Contents
   showToc: true
   tocOpen: true
-  # Show post reading time
   showReadingTime: true
-  # Show post word count
   showWordCount: false
-  # Show share buttons
   showShareButtons: true
-  # Comments system
+  ShowCodeCopyButtons: true
   comments: true
-  # Default theme (auto, light, dark)
-  defaultTheme: auto
-  # Enable search
+  # V1: Terminal Dark — force dark mode, no toggle
+  defaultTheme: dark
+  disableThemeToggle: true
   enableSearch: true
-  # Enable archive layout
   enableArchive: true
-  # Enable emoji support
   enableEmoji: true
-  showShareButtons: true
-  
-  homeInfoParams:
-    Title: "Stometa's Blog"
-    Content: "Blogs about technology, coding, and my life"
 
-  # Social links
+  # homeInfoParams removed — custom terminal homepage layout
+
   socialIcons:
     - name: "github"
       url: "https://github.com/stone16"
     - name: "linkedin"
       url: "https://www.linkedin.com/in/leilei-chen-837870b4/"
 
-  # Analytics
   analytics:
     google:
       SiteVerificationTag: ""
@@ -50,8 +38,6 @@ params:
     enable: true
     domain: "stometa.top"
 
-
-# Menu items
 menu:
   main:
     - identifier: "home"
@@ -75,13 +61,11 @@ menu:
       url: "/about/"
       weight: 50
 
-# Taxonomies
 taxonomies:
   category: "categories"
   tag: "tags"
   series: "series"
 
-# Enable syntax highlighting
 markup:
   highlight:
     anchorLineNos: false
@@ -91,7 +75,6 @@ markup:
     lineNumbersInTable: true
     noClasses: false
 
-# Build options
 build:
   useResourceCacheWhen: always
 
