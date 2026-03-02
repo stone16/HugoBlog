@@ -330,29 +330,14 @@ Fly CEO 宣称"sandbox 时代结束了，一次性电脑时代来了"。Sprites 
 
 ### 完整技术栈图谱
 
-```
-┌─────────────────────────────────────────────────────┐
-│                  触发层 (Event Routing)               │
-│  Slack / CLI / Web / PR Event / Cron / CI Webhook   │
-├─────────────────────────────────────────────────────┤
-│                  编排层 (Orchestration)               │
-│  Blueprint (Stripe) / Agent Loop (Ramp)             │
-│  确定性节点 ←→ LLM Agent 节点                        │
-├─────────────────────────────────────────────────────┤
-│                  上下文层 (Context)                   │
-│  Rule Files / MCP Tools / Code Search / Docs        │
-├─────────────────────────────────────────────────────┤
-│                  执行层 (Sandbox)                     │
-│  MicroVM (Firecracker) / Devbox / Modal             │
-│  完整开发环境 + 快照恢复 + 安全隔离                    │
-├─────────────────────────────────────────────────────┤
-│                  反馈层 (Feedback Loop)               │
-│  Lint (~5s) → CI (selective) → Auto-fix → Human PR  │
-├─────────────────────────────────────────────────────┤
-│                  治理层 (Governance)                  │
-│  权限控制 / 审计追踪 / Blast Radius / Human Review   │
-└─────────────────────────────────────────────────────┘
-```
+| 层 | 职责 | 关键组件 |
+|---|------|---------|
+| **触发层** (Event Routing) | 事件入口 | Slack / CLI / Web / PR Event / Cron / CI Webhook |
+| **编排层** (Orchestration) | 任务编排 | Blueprint (Stripe) / Agent Loop (Ramp) / 确定性节点 ←→ LLM Agent 节点 |
+| **上下文层** (Context) | 知识注入 | Rule Files / MCP Tools / Code Search / Docs |
+| **执行层** (Sandbox) | 隔离执行 | MicroVM (Firecracker) / Devbox / Modal / 完整开发环境 + 快照恢复 + 安全隔离 |
+| **反馈层** (Feedback Loop) | 验证闭环 | Lint (~5s) → CI (selective) → Auto-fix → Human PR |
+| **治理层** (Governance) | 安全治理 | 权限控制 / 审计追踪 / Blast Radius / Human Review |
 
 ### 潜在机会
 
