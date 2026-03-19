@@ -41,7 +41,7 @@ params:
 
   # Google Analytics 4 — fill in your Measurement ID (G-XXXXXXXXXX)
   # Get it from: analytics.google.com → Admin → Data Streams
-  googleAnalytics: ""   # e.g. "G-ABC123XYZ"
+  googleAnalytics: "G-QJ0Y03F19K"
 
   analytics:
     google:
