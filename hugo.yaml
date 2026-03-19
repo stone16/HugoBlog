@@ -1,46 +1,55 @@
 baseURL: "https://stometa.top"
 languageCode: "en-us"
 title: "Stometa's Blog"
-theme: ["PaperMod", "plausible-hugo"]
+theme: ["PaperMod"]
 
 params:
-  description: "A personal blog about technology, coding, and more"
+  env: production
+  description: "Practical insights on AI, indie products, and building in public — by Stometa, founder of ZentaStone"
   author: "Stometa"
   showFullContent: true
   showBreadCrumbs: true
-  showToc: true
-  tocOpen: true
+  ShowToc: true
+  TocOpen: true
+  UseHugoToc: true
   showReadingTime: true
   showWordCount: false
   showShareButtons: true
   ShowCodeCopyButtons: true
+  ShowPostNavLinks: true
   comments: true
-  # V1: Terminal Dark — force dark mode, no toggle
   defaultTheme: dark
   disableThemeToggle: true
   enableSearch: true
   enableArchive: true
   enableEmoji: true
 
-  # homeInfoParams removed — custom terminal homepage layout
-
   socialIcons:
     - name: "github"
       url: "https://github.com/stone16"
     - name: "linkedin"
       url: "https://www.linkedin.com/in/leilei-chen-837870b4/"
+    - name: "x"
+      url: "https://x.com/stometaverse"
+
+  # Favicon — SVG with PNG fallbacks
+  assets:
+    favicon: "/favicon.svg"
+    favicon16x16: "/favicon.svg"
+    favicon32x32: "/favicon.svg"
+    apple_touch_icon: "/favicon.svg"
 
   # Google Analytics 4 — fill in your Measurement ID (G-XXXXXXXXXX)
   # Get it from: analytics.google.com → Admin → Data Streams
-  googleAnalytics: ""   # e.g. "G-ABC123XYZ"
+  googleAnalytics: "G-QJ0Y03F19K"
 
   analytics:
     google:
       SiteVerificationTag: ""
 
-  plausible:
-    enable: true
-    domain: "stometa.top"
+  footer:
+    hideCopyright: true
+    text: "Stometa · Founder of [ZentaStone](https://zentastone.com)"
 
 menu:
   main:
@@ -71,6 +80,10 @@ taxonomies:
   series: "series"
 
 markup:
+  tableOfContents:
+    startLevel: 2
+    endLevel: 4
+    ordered: false
   highlight:
     anchorLineNos: false
     codeFences: true
