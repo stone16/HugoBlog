@@ -1,0 +1,69 @@
+{{- /* Reading Progress Bar — single posts only */ -}}
+{{- if and (eq .Kind "page") (ne .Layout "archives") (ne .Layout "search") (ne .Layout "links") }}
+<div class="reading-progress" role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <div class="reading-progress-fill"></div>
+</div>
+<script>
+(function() {
+  var bar = document.querySelector('.reading-progress-fill');
+  var prog = document.querySelector('.reading-progress');
+  if (!bar || !prog) return;
+  var content = document.querySelector('.post-content');
+  if (!content) { prog.style.display = 'none'; return; }
+  var ticking = false;
+  function update() {
+    var rect = content.getBoundingClientRect();
+    var total = content.scrollHeight;
+    var viewH = window.innerHeight;
+    if (total <= viewH) { prog.style.display = 'none'; return; }
+    var scrolled = Math.max(0, -rect.top);
+    var pct = Math.min(100, (scrolled / (total - viewH)) * 100);
+    bar.style.width = pct + '%';
+    prog.setAttribute('aria-valuenow', Math.round(pct));
+    ticking = false;
+  }
+  window.addEventListener('scroll', function() {
+    if (!ticking) { requestAnimationFrame(update); ticking = true; }
+  }, { passive: true });
+  update();
+})();
+</script>
+{{- end }}
+
+{{- /* Copy Link Button */ -}}
+{{- if and (eq .Kind "page") (ne .Layout "archives") (ne .Layout "search") }}
+<script>
+(function() {
+  var btns = document.querySelectorAll('.copy-link-btn');
+  btns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var url = btn.getAttribute('data-url');
+      var icon = btn.querySelector('.copy-link-icon');
+      var check = btn.querySelector('.copy-link-check');
+      var tip = btn.querySelector('.copy-link-tooltip');
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(function() {
+          icon.style.display = 'none';
+          check.style.display = 'inline';
+          tip.textContent = 'Copied!';
+          tip.classList.add('show');
+          setTimeout(function() {
+            icon.style.display = 'inline';
+            check.style.display = 'none';
+            tip.classList.remove('show');
+            tip.textContent = '';
+          }, 2000);
+        });
+      } else {
+        tip.textContent = url;
+        tip.classList.add('show');
+        setTimeout(function() {
+          tip.classList.remove('show');
+          tip.textContent = '';
+        }, 4000);
+      }
+    });
+  });
+})();
+</script>
+{{- end }}

@@ -14,17 +14,12 @@
 </script>
 
 {{- /* Theme meta */ -}}
-<meta name="theme-color" content="#08080f">
+<meta name="theme-color" content="#0F1117">
 <meta name="color-scheme" content="dark">
 
-{{- /* Plausible Analytics — privacy-first */ -}}
-<script defer data-domain="{{ site.Params.plausible.domain | default site.BaseURL }}"
-  src="https://plausible.io/js/script.file-downloads.hash.outbound-links.pageview-props.tagged-events.js"></script>
-<script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
-
-{{- /* Google Analytics 4 — uncomment and fill in your Measurement ID */ -}}
-{{- /* Replace G-XXXXXXXXXX with your GA4 Measurement ID from analytics.google.com */ -}}
+{{- /* Google Analytics 4 */ -}}
 {{- with site.Params.googleAnalytics }}
+{{- if ne . "" }}
 <script async src="https://www.googletagmanager.com/gtag/js?id={{ . }}"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -33,8 +28,9 @@
   gtag('config', '{{ . }}');
 </script>
 {{- end }}
+{{- end }}
 
-{{- /* Structured Data — Blog */ -}}
+{{- /* Structured Data — Blog + Person */ -}}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -44,7 +40,13 @@
   "description": "{{ site.Params.description }}",
   "author": {
     "@type": "Person",
-    "name": "{{ site.Params.author }}"
+    "name": "{{ site.Params.author }}",
+    "url": "https://zentastone.com",
+    "sameAs": [
+      "https://x.com/stometaverse",
+      "https://github.com/stone16",
+      "https://www.linkedin.com/in/leilei-chen-837870b4/"
+    ]
   }
 }
 </script>

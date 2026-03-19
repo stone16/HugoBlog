@@ -1,0 +1,125 @@
+{{- define "main" }}
+
+<article class="post-single">
+  <header class="post-header">
+    {{ partial "breadcrumbs.html" . }}
+
+    {{- /* Series badge */ -}}
+    {{- $series := .GetTerms "series" }}
+    {{- with $series }}
+    {{- $s := index . 0 }}
+    {{- $seriesPages := $s.Pages }}
+    {{- $currentIndex := 0 }}
+    {{- range $i, $p := $seriesPages }}
+      {{- if eq $p.Permalink $.Permalink }}{{ $currentIndex = add $i 1 }}{{ end }}
+    {{- end }}
+    <div class="series-badge">
+      <span>Series: {{ $s.LinkTitle }} &mdash; Part {{ $currentIndex }} of {{ len $seriesPages }}</span>
+    </div>
+    {{- end }}
+
+    <h1 class="post-title entry-hint-parent">
+      {{ .Title }}
+      {{- if .Draft }}
+      <span class="entry-hint" title="Draft">
+        <svg xmlns="http://www.w3.org/2000/svg" height="35" viewBox="0 -960 960 960" fill="currentColor">
+          <path d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z" />
+        </svg>
+      </span>
+      {{- end }}
+    </h1>
+    {{- if .Description }}
+    <div class="post-description">
+      {{ .Description }}
+    </div>
+    {{- end }}
+    {{- if not (.Param "hideMeta") }}
+    <div class="post-meta">
+      {{- partial "post_meta.html" . -}}
+      {{- partial "translation_list.html" . -}}
+      {{- partial "edit_post.html" . -}}
+      {{- partial "post_canonical.html" . -}}
+      <button class="copy-link-btn" aria-label="Copy post link" role="button" data-url="{{ .Permalink }}">
+        <svg class="copy-link-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        <svg class="copy-link-check" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polyline points="20 6 9 17 4 12"/></svg>
+        <span class="copy-link-tooltip" aria-live="polite"></span>
+      </button>
+    </div>
+    {{- end }}
+  </header>
+  {{- $isHidden := (.Param "cover.hiddenInSingle") | default (.Param "cover.hidden") | default false }}
+  {{- partial "cover.html" (dict "cxt" . "IsSingle" true "isHidden" $isHidden) }}
+  {{- if (.Param "ShowToc") }}
+  {{- partial "toc.html" . }}
+  {{- end }}
+
+  {{- if .Content }}
+  <div class="post-content">
+    {{- if not (.Param "disableAnchoredHeadings") }}
+    {{- partial "anchored_headings.html" .Content -}}
+    {{- else }}{{ .Content }}{{ end }}
+  </div>
+  {{- end }}
+
+  {{- /* Series Navigation */ -}}
+  {{- with $series }}
+  {{- $s := index . 0 }}
+  {{- $seriesPages := $s.Pages }}
+  {{- if gt (len $seriesPages) 1 }}
+  <nav class="series-nav" aria-label="Series navigation">
+    <div class="series-nav-label">Series: {{ $s.LinkTitle }}</div>
+    <div class="series-nav-links">
+      {{- $found := false }}
+      {{- $prev := false }}
+      {{- $next := false }}
+      {{- range $i, $p := $seriesPages }}
+        {{- if eq $p.Permalink $.Permalink }}
+          {{- $found = true }}
+        {{- else if not $found }}
+          {{- $prev = $p }}
+        {{- else if and $found (not $next) }}
+          {{- $next = $p }}
+        {{- end }}
+      {{- end }}
+      {{- with $prev }}
+      <a href="{{ .Permalink }}" class="series-nav-prev" aria-label="Previous in series: {{ .Title }}">
+        <span class="series-nav-arrow">&larr;</span>
+        <span class="series-nav-title">{{ .Title }}</span>
+      </a>
+      {{- else }}
+      <div class="series-nav-prev series-nav-empty"></div>
+      {{- end }}
+      {{- with $next }}
+      <a href="{{ .Permalink }}" class="series-nav-next" aria-label="Next in series: {{ .Title }}">
+        <span class="series-nav-title">{{ .Title }}</span>
+        <span class="series-nav-arrow">&rarr;</span>
+      </a>
+      {{- else }}
+      <div class="series-nav-next series-nav-empty"></div>
+      {{- end }}
+    </div>
+  </nav>
+  {{- end }}
+  {{- end }}
+
+  <footer class="post-footer">
+    {{- $tags := .Language.Params.Taxonomies.tag | default "tags" }}
+    <ul class="post-tags">
+      {{- range ($.GetTerms $tags) }}
+      <li><a href="{{ .Permalink }}">{{ .LinkTitle }}</a></li>
+      {{- end }}
+    </ul>
+    {{- if (.Param "ShowPostNavLinks") }}
+    {{- partial "post_nav_links.html" . }}
+    {{- end }}
+    {{- if (and site.Params.ShowShareButtons (ne .Params.disableShare true)) }}
+    {{- partial "share_icons.html" . -}}
+    {{- end }}
+  </footer>
+
+  {{- if (.Param "comments") }}
+  {{- partial "comments.html" . }}
+  {{- end }}
+</article>
+
+{{- end }}{{/* end main */}}
