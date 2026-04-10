@@ -904,7 +904,7 @@ code {
 
 .share-buttons a:hover { color: var(--text); }
 
-/* ── Footer ── */
+/* ── Footer (base reset) ── */
 .footer {
   font-size: 0.8rem;
   color: var(--muted);
@@ -1264,10 +1264,247 @@ code {
 }
 
 /* ============================================================
-   BRANDED FOOTER
+   PROJECTS SECTION
    ============================================================ */
 
-.branded-footer {
+#projects {
+  margin-top: 2rem;
+  margin-bottom: 3rem;
+}
+
+.project-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--border-subtle);
+  text-decoration: none;
+  transition: padding-left 0.25s var(--ease), color 0.2s var(--ease);
+  gap: 1rem;
+}
+
+.project-entry:hover {
+  padding-left: 6px;
+}
+
+.project-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.project-name {
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+  transition: color 0.2s var(--ease);
+  line-height: 1.5;
+}
+
+.project-entry:hover .project-name {
+  color: var(--secondary);
+}
+
+.project-desc {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.project-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.project-tech-pill {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 0.15rem 0.5rem;
+  border-radius: 99px;
+  white-space: nowrap;
+  line-height: 1.3;
+}
+
+/* ============================================================
+   ZENTASTONE CARD
+   ============================================================ */
+
+#zentastone {
+  margin-top: 2rem;
+  margin-bottom: 3rem;
+}
+
+.zentastone-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  background: var(--surface);
+}
+
+.zentastone-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.zentastone-name {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.zentastone-badge {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--green);
+  background: var(--green-dim);
+  padding: 0.2rem 0.6rem;
+  border-radius: 99px;
+  line-height: 1;
+}
+
+.zentastone-desc {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--secondary);
+  margin: 0 0 1.25rem;
+}
+
+.zentastone-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.zentastone-feature {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.zentastone-feature-title {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.zentastone-feature-desc {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.zentastone-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--secondary);
+  text-decoration: none;
+  transition: color 0.2s var(--ease);
+}
+
+.zentastone-link:hover {
+  color: var(--text);
+}
+
+.zentastone-link svg {
+  transition: transform 0.2s var(--ease);
+}
+
+.zentastone-link:hover svg {
+  transform: translate(2px, -2px);
+}
+
+/* ============================================================
+   CONNECT GRID
+   ============================================================ */
+
+#connect {
+  margin-top: 2rem;
+  margin-bottom: 3rem;
+}
+
+.connect-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.connect-card {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 1rem 1.15rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: all 0.2s var(--ease);
+  background: transparent;
+}
+
+.connect-card:hover {
+  background: var(--surface-hover);
+  border-color: var(--text);
+  transform: translateY(-1px);
+}
+
+.connect-icon {
+  color: var(--muted);
+  flex-shrink: 0;
+  transition: color 0.2s var(--ease);
+}
+
+.connect-card:hover .connect-icon {
+  color: var(--text);
+}
+
+.connect-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.connect-platform {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.connect-handle {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  line-height: 1.3;
+}
+
+/* ============================================================
+   SITE FOOTER
+   ============================================================ */
+
+.site-footer {
   border-top: 1px solid var(--border-subtle) !important;
   padding: 2rem 1.5rem !important;
   margin-top: 4rem;
@@ -1276,80 +1513,51 @@ code {
   margin-right: auto;
 }
 
-.footer-content {
+.site-footer-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 0.75rem;
-  margin-bottom: 0.75rem;
 }
 
-.footer-main {
+.site-footer-copy {
+  font-size: 0.8rem;
+  color: var(--muted);
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  font-size: 0.8rem;
-  color: var(--muted);
 }
 
-.footer-main a {
+.site-footer-copy a {
   color: var(--secondary);
   text-decoration: none;
   transition: color 0.2s;
 }
 
-.footer-main a:hover {
+.site-footer-copy a:hover {
   color: var(--text);
-}
-
-.footer-name {
-  font-weight: 600;
-  color: var(--secondary);
 }
 
 .footer-sep {
   color: var(--border);
 }
 
-.footer-links {
+.site-footer-links {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   font-size: 0.8rem;
 }
 
-.footer-links a {
+.site-footer-links a {
   color: var(--muted);
   text-decoration: none;
   transition: color 0.2s;
 }
 
-.footer-links a:hover {
+.site-footer-links a:hover {
   color: var(--secondary);
-}
-
-.footer-social {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.footer-social a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--muted);
-  transition: color 0.2s;
-}
-
-.footer-social a:hover {
-  color: var(--secondary);
-}
-
-.footer-copy {
-  font-size: 0.75rem;
-  color: var(--muted);
 }
 
 /* ============================================================
@@ -1533,9 +1741,22 @@ code {
     justify-content: flex-start;
   }
 
-  .footer-content {
+  .site-footer-inner {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .connect-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .zentastone-features {
+    grid-template-columns: 1fr;
+  }
+
+  .project-entry {
+    flex-direction: column;
+    gap: 0.5rem;
   }
 
   .links-avatar {
