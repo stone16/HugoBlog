@@ -153,123 +153,178 @@ html {
    HOMEPAGE — HERO
    ============================================================ */
 
-.ai-hero {
+.hero {
   max-width: 768px;
-  margin: 5rem auto 3rem;
+  margin: 4rem auto 0;
   padding: 0 1.5rem;
   position: relative;
 }
 
-.ai-hero-eyebrow {
+/* ── Hero Name ── */
+.hero-name {
+  font-family: var(--font-body);
+  font-size: clamp(2.25rem, 5vw, 2.75rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  color: var(--text);
+  line-height: 1.1;
+  margin: 0 0 1rem;
+}
+
+/* ── Status Pill ── */
+.hero-status {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   font-family: var(--font-body);
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-size: 0.82rem;
+  font-weight: 500;
   color: var(--secondary);
-  margin-bottom: 1.25rem;
-  padding: 0.35rem 0.75rem;
+  padding: 0.35rem 0.85rem;
   border: 1px solid var(--border);
   border-radius: 99px;
   background: var(--surface);
-}
-
-.ai-hero-eyebrow::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--muted);
-}
-
-.ai-hero-title {
-  font-family: var(--font-body);
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.03em;
-  color: var(--text);
   margin-bottom: 1.25rem;
 }
 
-.ai-hero-title .gradient-text {
-  color: var(--text);
+.hero-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  position: relative;
+  flex-shrink: 0;
 }
 
-.ai-hero-desc {
-  font-size: 1.1rem;
-  line-height: 1.75;
-  color: var(--secondary);
-  max-width: 560px;
-  margin-bottom: 2rem;
+.hero-status-dot::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: var(--green);
+  opacity: 0.4;
+  animation: pulse-dot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-.ai-hero-meta {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  flex-wrap: wrap;
+@keyframes pulse-dot {
+  0%, 100% { opacity: 0; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.6); }
 }
 
-.ai-hero-stat {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-}
-
-.ai-hero-stat-num {
-  font-family: var(--font-body);
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--text);
+.hero-status-text {
   line-height: 1;
 }
 
-.ai-hero-stat-label {
-  font-size: 0.75rem;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-
-.ai-hero-divider {
-  width: 1px;
-  height: 2rem;
-  background: var(--border);
-}
-
-.ai-hero-social {
-  display: flex;
-  gap: 0.75rem;
-  margin-left: auto;
-}
-
-.ai-hero-social a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
+/* ── Bio ── */
+.hero-bio {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  line-height: 1.75;
   color: var(--secondary);
-  transition: all 0.2s var(--ease);
-  background: var(--surface);
+  max-width: 560px;
+  margin-bottom: 1.5rem;
 }
 
-.ai-hero-social a:hover {
+.hero-bio strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* ── Social Links ── */
+.hero-social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.hero-social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--secondary);
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  background: transparent;
+  text-decoration: none;
+  transition: all 0.2s var(--ease);
+}
+
+.hero-social-link:hover {
   color: var(--text);
   border-color: var(--text);
   background: var(--surface-hover);
   transform: translateY(-1px);
 }
 
-.ai-hero-social svg {
-  width: 18px;
-  height: 18px;
+.hero-social-link svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   HOMEPAGE — NOW CARD
+   ============================================================ */
+
+.now-card {
+  max-width: 768px;
+  margin: 0 auto 2.5rem;
+  padding: 0 1.5rem;
+}
+
+.now-card-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.now-card-title {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.now-card-updated {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.now-card-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.now-card-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--secondary);
+}
+
+.now-card-diamond {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  color: var(--muted);
+  margin-top: 0.45rem;
 }
 
 /* ── Divider ── */
