@@ -33,7 +33,7 @@
 }
 
 /* ── Design Tokens — Dark ── */
-[data-theme="dark"] {
+:root[data-theme="dark"] {
   --bg:             #0A0A0A;
   --bg-pure:        #000000;
   --text:           #EDEDED;
@@ -52,12 +52,10 @@ body {
   --theme:    var(--bg);
   --entry:    var(--surface);
   --primary:  var(--text);
-  --secondary: var(--secondary);
   --tertiary: var(--muted);
   --content:  var(--text);
   --hljs-bg:  var(--surface);
   --code-bg:  var(--surface);
-  --border:   var(--border);
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-body);
