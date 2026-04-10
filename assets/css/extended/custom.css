@@ -355,6 +355,86 @@ html {
 }
 
 /* ============================================================
+   ARTICLES SECTION — Flat list with section header
+   ============================================================ */
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.section-label {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.section-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.section-count {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 0.15rem 0.55rem;
+  border-radius: 99px;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.article-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--border-subtle);
+  text-decoration: none;
+  transition: padding-left 0.25s var(--ease), color 0.2s var(--ease);
+  gap: 1rem;
+}
+
+.article-entry:hover {
+  padding-left: 6px;
+}
+
+.article-entry:hover .article-title {
+  color: var(--secondary);
+}
+
+.article-title {
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+  transition: color 0.2s var(--ease);
+  line-height: 1.5;
+  min-width: 0;
+}
+
+.article-date {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+#writing {
+  margin-top: 2rem;
+  margin-bottom: 3rem;
+}
+
+/* ============================================================
    POST CARDS — Editorial Grid
    ============================================================ */
 
