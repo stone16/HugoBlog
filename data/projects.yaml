@@ -1,0 +1,19 @@
+- name: "ZentaStone"
+  description: "AI-powered SEO/GEO platform for e-commerce brands"
+  tech: ["AI", "SEO", "Python"]
+  url: "https://zentastone.com"
+
+- name: "stometa.top"
+  description: "Personal blog on AI, indie products, and building in public"
+  tech: ["Hugo", "PaperMod", "GitHub Pages"]
+  url: "https://stometa.top"
+
+- name: "OpenClaw"
+  description: "Open-source claw machine automation toolkit"
+  tech: ["Python", "Hardware", "IoT"]
+  url: "https://github.com/stone16"
+
+- name: "AI Writing Tools"
+  description: "Experimental AI content generation pipeline"
+  tech: ["Claude", "GPT", "Automation"]
+  url: "https://github.com/stone16"
