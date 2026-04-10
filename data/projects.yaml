@@ -3,17 +3,17 @@
   tech: ["AI", "SEO", "Python"]
   url: "https://zentastone.com"
 
+- name: "claude-review-loop"
+  description: "Cross-LLM iterative code review plugin for Claude Code — spawns Codex or Gemini as peer reviewer"
+  tech: ["Claude Code", "Codex", "Gemini"]
+  url: "https://github.com/stone16/claude-review-loop"
+
+- name: "Invoice-Manager"
+  description: "发票管理助手，基于 OCR + LLM 进行发票识别与管理"
+  tech: ["OCR", "LLM", "Python"]
+  url: "https://github.com/stone16/Invoice-Manager"
+
 - name: "stometa.top"
   description: "Personal blog on AI, indie products, and building in public"
   tech: ["Hugo", "PaperMod", "GitHub Pages"]
   url: "https://stometa.top"
-
-- name: "OpenClaw"
-  description: "Open-source claw machine automation toolkit"
-  tech: ["Python", "Hardware", "IoT"]
-  url: "https://github.com/stone16"
-
-- name: "AI Writing Tools"
-  description: "Experimental AI content generation pipeline"
-  tech: ["Claude", "GPT", "Automation"]
-  url: "https://github.com/stone16"
