@@ -20,3 +20,8 @@ hugo.linux
 .Trashes
 ehthumbs.db
 Thumbs.db 
+.gstack/
+.harness/*/
+!.harness/retro/
+!.harness/retro/**
+!.harness/config.json
