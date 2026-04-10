@@ -73,12 +73,23 @@
 <script>
     document.getElementById("theme-toggle").addEventListener("click", () => {
         const html = document.querySelector("html");
+        let newTheme;
         if (html.dataset.theme === "dark") {
             html.dataset.theme = 'light';
             localStorage.setItem("pref-theme", 'light');
+            newTheme = 'light';
         } else {
             html.dataset.theme = 'dark';
             localStorage.setItem("pref-theme", 'dark');
+            newTheme = 'dark';
+        }
+        // Sync Giscus comments theme with page theme
+        const giscusFrame = document.querySelector('iframe.giscus-frame');
+        if (giscusFrame) {
+            giscusFrame.contentWindow.postMessage(
+                { giscus: { setConfig: { theme: newTheme === 'dark' ? 'dark' : 'light' } } },
+                'https://giscus.app'
+            );
         }
     })
 </script>

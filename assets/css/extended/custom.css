@@ -748,13 +748,21 @@ a[href*="/tags/"]:hover {
 }
 
 /* ── Code ── */
+/* Syntax-highlighted code blocks always use dark surface for readability
+   with PaperMod's Catppuccin Macchiato Chroma theme */
 .highlight pre, pre {
-  background: var(--surface) !important;
+  background: #1a1a2e !important;
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: 1.25rem;
   overflow-x: auto;
   position: relative;
+  color: #cad3f5;
+}
+
+[data-theme="dark"] .highlight pre,
+[data-theme="dark"] pre {
+  background: var(--surface) !important;
 }
 
 /* Remove fake traffic lights from V1 */
@@ -771,6 +779,7 @@ code {
   font-size: 0.875rem;
 }
 
+/* Inline code — theme-aware */
 :not(pre) > code {
   background: var(--surface);
   color: var(--text);
