@@ -75,15 +75,36 @@ body {
   opacity: 0.6;
 }
 
+/* ── Global Layout ── */
+html {
+  scroll-padding-top: 64px;
+}
+
+.container {
+  max-width: 768px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
 /* ── Header / Nav ── */
-.nav {
-  background: var(--bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
+.header {
   position: sticky;
   top: 0;
   z-index: 100;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+:root[data-theme="dark"] .header {
+  background: rgba(10, 10, 10, 0.85);
+}
+
+.nav {
+  max-width: 768px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
 .logo a {
@@ -96,6 +117,23 @@ body {
 
 /* Remove old cursor blink */
 .logo a::after { display: none; }
+
+/* Theme toggle button */
+#theme-toggle {
+  color: var(--secondary);
+  cursor: pointer;
+  background: none;
+  border: none;
+  transition: color 0.2s var(--ease);
+}
+
+#theme-toggle:hover {
+  color: var(--text);
+}
+
+#theme-toggle svg {
+  vertical-align: middle;
+}
 
 #menu a {
   font-family: var(--font-body);
