@@ -53,6 +53,77 @@
 </section>
 {{- end }}
 
+{{- /* ── CONTRIBUTIONS HEATMAP ── */ -}}
+{{ with site.Data.contributions }}
+{{ if gt .totalContributions 0 }}
+<section class="heatmap-section">
+  <div class="heatmap-header">
+    <span class="heatmap-label">Contributions</span>
+    <span class="heatmap-count">{{ .totalContributions }} in the last year</span>
+  </div>
+
+  <div class="heatmap-scroll">
+    <div class="heatmap-grid">
+      {{- /* Render 52 columns x 7 rows. Each week is a column. */ -}}
+      {{- $weeks := .weeks -}}
+      {{- $totalWeeks := len $weeks -}}
+      {{- $startIdx := 0 -}}
+      {{- if gt $totalWeeks 52 -}}
+        {{- $startIdx = sub $totalWeeks 52 -}}
+      {{- end -}}
+      {{- $displayWeeks := after $startIdx $weeks -}}
+      {{- range $wi, $week := $displayWeeks -}}
+        <div class="heatmap-col">
+          {{- range $di, $day := $week.contributionDays -}}
+            <div class="heatmap-cell heatmap-l{{ $day.level }}" title="{{ $day.date }}: {{ $day.count }} contributions"></div>
+          {{- end -}}
+        </div>
+      {{- end -}}
+    </div>
+  </div>
+
+  {{- /* Month labels */ -}}
+  <div class="heatmap-months">
+    {{- $weeks2 := after $startIdx $weeks -}}
+    {{- $prevMonth := "" -}}
+    {{- range $wi, $week := $weeks2 -}}
+      {{- $firstDay := index $week.contributionDays 0 -}}
+      {{- $date := $firstDay.date -}}
+      {{- $month := substr $date 5 2 -}}
+      {{- $monthName := "" -}}
+      {{- if eq $month "01" }}{{ $monthName = "Jan" }}
+      {{- else if eq $month "02" }}{{ $monthName = "Feb" }}
+      {{- else if eq $month "03" }}{{ $monthName = "Mar" }}
+      {{- else if eq $month "04" }}{{ $monthName = "Apr" }}
+      {{- else if eq $month "05" }}{{ $monthName = "May" }}
+      {{- else if eq $month "06" }}{{ $monthName = "Jun" }}
+      {{- else if eq $month "07" }}{{ $monthName = "Jul" }}
+      {{- else if eq $month "08" }}{{ $monthName = "Aug" }}
+      {{- else if eq $month "09" }}{{ $monthName = "Sep" }}
+      {{- else if eq $month "10" }}{{ $monthName = "Oct" }}
+      {{- else if eq $month "11" }}{{ $monthName = "Nov" }}
+      {{- else if eq $month "12" }}{{ $monthName = "Dec" }}
+      {{- end -}}
+      {{- if ne $month $prevMonth -}}
+        <span class="heatmap-month" style="grid-column: {{ add $wi 1 }}">{{ $monthName }}</span>
+      {{- end -}}
+      {{- $prevMonth = $month -}}
+    {{- end -}}
+  </div>
+
+  <div class="heatmap-legend">
+    <span class="heatmap-legend-label">Less</span>
+    <div class="heatmap-cell heatmap-l0"></div>
+    <div class="heatmap-cell heatmap-l1"></div>
+    <div class="heatmap-cell heatmap-l2"></div>
+    <div class="heatmap-cell heatmap-l3"></div>
+    <div class="heatmap-cell heatmap-l4"></div>
+    <span class="heatmap-legend-label">More</span>
+  </div>
+</section>
+{{ end }}
+{{ end }}
+
 {{- /* ── DIVIDER ── */ -}}
 <div class="ai-divider">
   <span class="ai-divider-label">Latest</span>
