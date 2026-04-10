@@ -1,21 +1,29 @@
-{{- /* V3: AI Editorial — Fonts + Analytics */ -}}
+{{- /* V4: Monochrome Design System — Fonts + Theme + Analytics */ -}}
 
 {{- /* Preconnect */ -}}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-{{- /* Plus Jakarta Sans (headings) + Inter (body) + JetBrains Mono (code) */ -}}
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+{{- /* Inter (body 400-800) + JetBrains Mono (code 400-500) + Noto Sans SC (CJK 400-700) */ -}}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 
-{{- /* Force dark on page load, prevent flash */ -}}
+{{- /* Flash-prevention: check localStorage, default to light */ -}}
 <script>
-  document.documentElement.classList.add('dark');
-  document.documentElement.setAttribute('data-theme', 'dark');
+  (function() {
+    var saved = localStorage.getItem('pref-theme');
+    if (saved === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      document.documentElement.classList.add('dark');
+    } else if (saved === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+      document.documentElement.classList.remove('dark');
+    }
+  })();
 </script>
 
-{{- /* Theme meta */ -}}
-<meta name="theme-color" content="#0F1117">
-<meta name="color-scheme" content="dark">
+{{- /* Theme meta — light default */ -}}
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
 
 {{- /* Google Analytics 4 */ -}}
 {{- with site.Params.googleAnalytics }}
