@@ -1,12 +1,12 @@
 baseURL: "https://stometa.top"
 languageCode: "en-us"
-title: "Stometa's Blog"
+title: "Leilei Chen's Blog"
 theme: ["PaperMod"]
 
 params:
   env: production
-  description: "Practical insights on AI, indie products, and building in public — by Stometa, founder of ZentaStone"
-  author: "Stometa"
+  description: "Practical insights on AI, indie products, and building in public — by Leilei Chen, founder of ZentaStone"
+  author: "Leilei Chen"
   showFullContent: true
   showBreadCrumbs: true
   ShowToc: true
@@ -49,7 +49,7 @@ params:
 
   footer:
     hideCopyright: true
-    text: "Stometa · Founder of [ZentaStone](https://zentastone.com)"
+    text: "Leilei Chen · Founder of [ZentaStone](https://zentastone.com)"
 
 menu:
   main:
