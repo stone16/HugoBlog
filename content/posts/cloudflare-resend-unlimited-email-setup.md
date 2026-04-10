@@ -7,7 +7,6 @@ tags: []
 description: 用 Cloudflare Email Routing + Resend SMTP + Gmail，一个域名创建无限专业邮箱，收发闭环，年成本仅域名费
   $10。
 slug: cloudflare-resend-unlimited-email-setup
-lang: zh-CN
 cover:
   image: /images/cloudflare-resend-unlimited-email-setup/card1.png
   alt: 用 Cloudflare + Resend 打造无限邮箱：一人公司的邮件基础设施

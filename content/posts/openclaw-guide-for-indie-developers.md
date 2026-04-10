@@ -15,7 +15,6 @@ tags:
 - Skill
 description: 用了 OpenClaw 几个月的踩坑总结：它不是更聪明的 ChatGPT，而是可编程的 AI 助手。正确用法是把你的 SOP 写成 Skill，让它执行你设计的流程。
 slug: openclaw-guide-for-indie-developers
-lang: zh-CN
 cover:
   image: /images/openclaw-guide-for-indie-developers/card1.png
   alt: OpenClaw 避坑指南：独立开发者的正确打开方式
