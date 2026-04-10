@@ -53,26 +53,22 @@ params:
 
 menu:
   main:
-    - identifier: "home"
-      name: "Home"
-      url: "/"
-      weight: 10
-    - identifier: "posts"
-      name: "Posts"
+    - identifier: "writing"
+      name: "Writing"
       url: "/posts/"
+      weight: 10
+    - identifier: "projects"
+      name: "Projects"
+      url: "/#projects"
       weight: 20
-    - identifier: "categories"
-      name: "Categories"
-      url: "/categories/"
+    - identifier: "zentastone"
+      name: "ZentaStone"
+      url: "/#zentastone"
       weight: 30
-    - identifier: "tags"
-      name: "Tags"
-      url: "/tags/"
+    - identifier: "connect"
+      name: "Connect"
+      url: "/#connect"
       weight: 40
-    - identifier: "about"
-      name: "About"
-      url: "/about/"
-      weight: 50
 
 taxonomies:
   category: "categories"
