@@ -17,7 +17,6 @@ tags:
 description: 深度解析 Ramp 和 Stripe 的 Background Agent 工程实践：MicroVM 沙箱架构、Blueprint 混合编排、shift-left
   反馈循环，以及 2026 年 AI Sandbox 市场全景图。
 slug: enterprise-background-agent-ramp-stripe
-lang: zh-CN
 ---
 
 ## Core Idea

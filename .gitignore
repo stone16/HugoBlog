@@ -4,6 +4,9 @@
 /assets/jsconfig.json
 hugo_stats.json
 
+# Generated at build time by scripts/fetch-contributions.sh
+data/contributions.json
+
 # Executable may be added to repository
 hugo.exe
 hugo.darwin
@@ -20,3 +23,8 @@ hugo.linux
 .Trashes
 ehthumbs.db
 Thumbs.db 
+.gstack/
+.harness/*/
+!.harness/retro/
+!.harness/retro/**
+!.harness/config.json

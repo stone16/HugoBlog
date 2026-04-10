@@ -16,7 +16,6 @@ tags:
 - 程序员
 description: 一个程序员从 SDE 到 EM 的成长路径，以及为何在 AI 重构杠杆结构的转折点选择裸辞，用 AI Agent 重新定义个人生产方式。
 slug: from-em-to-ai-agent-manager-career-reflection
-lang: zh-CN
 cover:
   image: /images/from-em-to-ai-agent-manager-career-reflection/card1.png
   alt: 从管理团队到管理 AI Agent：一个程序员的裸辞跑路思考

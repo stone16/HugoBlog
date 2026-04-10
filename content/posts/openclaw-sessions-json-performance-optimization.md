@@ -16,7 +16,6 @@ tags:
 description: OpenClaw sessions.json 因 skillsSnapshot 重复存储膨胀至 38MB，导致 Discord event
   loop 阻塞 9 分钟。本文记录根因分析与自动化清理方案。
 slug: openclaw-sessions-json-performance-optimization
-lang: zh-CN
 cover:
   image: /images/openclaw-sessions-json-performance-optimization/card1.png
   alt: OpenClaw sessions.json 性能优化：从 38MB 到 2.8MB

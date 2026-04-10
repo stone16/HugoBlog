@@ -17,7 +17,6 @@ tags:
 description: YC CEO Gary Tan 开源了一套结构化 AI Skill，让 AI 像技术合伙人一样 Review 代码方案。拆解其核心框架，看懂
   Prompt 深度与思考深度的关系。
 slug: why-yc-ceo-ai-is-10x-better-than-yours
-lang: zh-CN
 cover:
   image: /images/why-yc-ceo-ai-is-10x-better-than-yours/card1.png
   alt: 同样用Claude，为什么YC CEO的AI比你好用10倍

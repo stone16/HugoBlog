@@ -58,6 +58,12 @@ jobs:
         uses: actions/configure-pages@v5
       - name: Install Node.js dependencies
         run: "[[ -f package-lock.json || -f npm-shrinkwrap.json ]] && npm ci || true"
+      - name: Fetch GitHub contributions
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          chmod +x scripts/fetch-contributions.sh
+          ./scripts/fetch-contributions.sh
       - name: Cache Restore
         id: cache-restore
         uses: actions/cache/restore@v4
