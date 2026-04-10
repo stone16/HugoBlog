@@ -18,8 +18,8 @@ params:
   ShowCodeCopyButtons: true
   ShowPostNavLinks: true
   comments: true
-  defaultTheme: dark
-  disableThemeToggle: true
+  defaultTheme: light
+  disableThemeToggle: false
   enableSearch: true
   enableArchive: true
   enableEmoji: true
