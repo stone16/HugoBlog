@@ -52,7 +52,7 @@ body {
   --theme:    var(--bg);
   --entry:    var(--surface);
   --primary:  var(--text);
-  --tertiary: var(--muted);
+  --tertiary: var(--border);
   --content:  var(--text);
   --hljs-bg:  var(--surface);
   --code-bg:  var(--surface);
@@ -901,6 +901,90 @@ code {
 
 [data-theme="dark"] #searchbox input:focus {
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.05);
+}
+
+/* ── Archive Page ── */
+.archive-year-header {
+  font-family: var(--font-body);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.archive-month-header {
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--secondary);
+}
+
+.archive-entry-title {
+  font-family: var(--font-body);
+  font-weight: 500;
+  color: var(--text);
+}
+
+.archive-meta {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.archive-count {
+  font-family: var(--font-mono);
+  color: var(--muted);
+}
+
+.archive-header-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ── Terms / Taxonomy Pages (Tags & Categories listing) ── */
+.terms-tags a {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--secondary);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  padding: 0.35em 0.85em;
+  transition: all 0.2s var(--ease);
+}
+
+.terms-tags a:hover {
+  color: var(--text);
+  border-color: var(--text);
+  background: var(--surface-hover);
+}
+
+.terms-tags a:active {
+  background: var(--surface-hover);
+  transform: scale(0.96);
+}
+
+/* ── Search Results ── */
+#searchResults li {
+  font-family: var(--font-body);
+}
+
+#searchResults .entry-header h2 {
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* ── Page headers (archive, tags, categories, search) ── */
+.page-header h1 {
+  font-family: var(--font-body);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+
+/* ── List page background — match design system ── */
+.list {
+  background: var(--bg) !important;
 }
 
 /* ── Share buttons ── */
