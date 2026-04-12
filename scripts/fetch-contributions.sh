@@ -43,8 +43,8 @@ done
 QUERY='query($login:String!) {
   user(login:$login) {
     contributionsCollection {
-      totalContributions
       contributionCalendar {
+        totalContributions
         weeks {
           contributionDays {
             contributionCount
@@ -94,7 +94,7 @@ fi
 # Map contributionLevel strings to numeric levels:
 #   NONE=0, FIRST_QUARTILE=1, SECOND_QUARTILE=2, THIRD_QUARTILE=3, FOURTH_QUARTILE=4
 RESULT=$(echo "$RESPONSE" | jq '{
-  totalContributions: .data.user.contributionsCollection.totalContributions,
+  totalContributions: .data.user.contributionsCollection.contributionCalendar.totalContributions,
   weeks: [
     .data.user.contributionsCollection.contributionCalendar.weeks[] | {
       contributionDays: [
