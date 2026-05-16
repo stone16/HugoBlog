@@ -6,11 +6,11 @@
 
   <div class="hero-status">
     <span class="hero-status-dot"></span>
-    <span class="hero-status-text">Building ZentaStone</span>
+    <span class="hero-status-text">Building in public</span>
   </div>
 
   <p class="hero-bio">
-    Founder of <strong>ZentaStone</strong> — building AI-powered tools for e-commerce.
+    Indie builder crafting AI-powered tools.
     Previously engineer at <strong>Amazon</strong> and <strong>Flexport</strong>.
     Writing about AI, indie products, and building in public.
   </p>
@@ -163,36 +163,6 @@
     </div>
   </a>
   {{- end }}
-</section>
-{{- end }}
-
-{{- /* ── ZENTASTONE ── */ -}}
-{{- with site.Data.zentastone }}
-<section class="container" id="zentastone">
-  <div class="section-header">
-    <span class="section-label">COMPANY</span>
-    <div class="section-line"></div>
-  </div>
-
-  <div class="zentastone-card">
-    <div class="zentastone-header">
-      <span class="zentastone-name">{{ .name }}</span>
-      <span class="zentastone-badge">Active</span>
-    </div>
-    <p class="zentastone-desc">{{ .description }}</p>
-    <div class="zentastone-features">
-      {{- range .features }}
-      <div class="zentastone-feature">
-        <span class="zentastone-feature-title">{{ .title }}</span>
-        <span class="zentastone-feature-desc">{{ .description }}</span>
-      </div>
-      {{- end }}
-    </div>
-    <a href="{{ .url }}" target="_blank" rel="noopener noreferrer" class="zentastone-link">
-      <span>Visit ZentaStone</span>
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
-    </a>
-  </div>
 </section>
 {{- end }}
 
