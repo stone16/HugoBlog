@@ -1428,107 +1428,6 @@ code {
 }
 
 /* ============================================================
-   ZENTASTONE CARD
-   ============================================================ */
-
-#zentastone {
-  margin-top: 2rem;
-  margin-bottom: 3rem;
-}
-
-.zentastone-card {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 1.5rem;
-  background: var(--surface);
-}
-
-.zentastone-header {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.75rem;
-}
-
-.zentastone-name {
-  font-family: var(--font-body);
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--text);
-  letter-spacing: -0.02em;
-}
-
-.zentastone-badge {
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  font-weight: 600;
-  color: var(--green);
-  background: var(--green-dim);
-  padding: 0.2rem 0.6rem;
-  border-radius: 99px;
-  line-height: 1;
-}
-
-.zentastone-desc {
-  font-family: var(--font-body);
-  font-size: 0.9rem;
-  line-height: 1.7;
-  color: var(--secondary);
-  margin: 0 0 1.25rem;
-}
-
-.zentastone-features {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  margin-bottom: 1.25rem;
-}
-
-.zentastone-feature {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.zentastone-feature-title {
-  font-family: var(--font-body);
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--text);
-}
-
-.zentastone-feature-desc {
-  font-family: var(--font-body);
-  font-size: 0.78rem;
-  color: var(--muted);
-  line-height: 1.5;
-}
-
-.zentastone-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-family: var(--font-body);
-  font-size: 0.82rem;
-  font-weight: 500;
-  color: var(--secondary);
-  text-decoration: none;
-  transition: color 0.2s var(--ease);
-}
-
-.zentastone-link:hover {
-  color: var(--text);
-}
-
-.zentastone-link svg {
-  transition: transform 0.2s var(--ease);
-}
-
-.zentastone-link:hover svg {
-  transform: translate(2px, -2px);
-}
-
-/* ============================================================
    CONNECT GRID
    ============================================================ */
 
@@ -1840,10 +1739,6 @@ code {
   }
 
   .connect-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .zentastone-features {
     grid-template-columns: 1fr;
   }
 
