@@ -8,6 +8,11 @@
   tech: ["OCR", "LLM", "Python"]
   url: "https://github.com/stone16/Invoice-Manager"
 
+- name: "zentapi"
+  description: "AI API Gateway — Subscription to API Conversion Platform. One key for all mainstream LLM models, enterprise-ready"
+  tech: ["Vue.js", "AI/ML", "API Gateway"]
+  url: "https://zentapi.com"
+
 - name: "stometa.top"
   description: "Personal blog on AI, indie products, and building in public"
   tech: ["Hugo", "PaperMod", "GitHub Pages"]
