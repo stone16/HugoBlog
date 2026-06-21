@@ -34,6 +34,65 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', '{{ . }}');
+
+  document.addEventListener('click', function(event) {
+    var target = event.target;
+    var anchor = target && target.closest ? target.closest('a[href]') : null;
+
+    if (!anchor || !window.gtag) {
+      return;
+    }
+
+    var rawHref = anchor.getAttribute('href') || '';
+
+    if (!rawHref || rawHref.indexOf('javascript:') === 0) {
+      return;
+    }
+
+    var linkText = (anchor.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 120);
+    var params = {
+      link_text: linkText,
+      link_url: anchor.href,
+      page_path: window.location.pathname + window.location.search
+    };
+
+    if (rawHref.indexOf('mailto:') === 0) {
+      gtag('event', 'generate_lead', Object.assign({}, params, {
+        event_category: 'contact',
+        method: 'email'
+      }));
+      return;
+    }
+
+    var url;
+    try {
+      url = new URL(anchor.href, window.location.href);
+    } catch (e) {
+      return;
+    }
+
+    if (url.origin !== window.location.origin) {
+      gtag('event', 'outbound_link_click', Object.assign({}, params, {
+        event_category: 'outbound',
+        link_domain: url.hostname
+      }));
+      return;
+    }
+
+    if (url.hash && url.pathname === window.location.pathname) {
+      gtag('event', 'anchor_link_click', Object.assign({}, params, {
+        event_category: 'navigation',
+        anchor_id: url.hash.replace('#', '')
+      }));
+      return;
+    }
+
+    if (url.pathname !== window.location.pathname) {
+      gtag('event', 'navigation_click', Object.assign({}, params, {
+        event_category: 'navigation'
+      }));
+    }
+  }, true);
 </script>
 {{- end }}
 {{- end }}
