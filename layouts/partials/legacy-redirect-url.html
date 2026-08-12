@@ -1,0 +1,23 @@
+{{- /*
+  Return the destination URL for a page published on stometa.top.
+  This is intentionally a soft redirect: GitHub Pages cannot emit a
+  server-side 301 for arbitrary paths, so the old URL remains the document
+  that search engines crawl while the canonical points at stometa.dev.
+*/ -}}
+{{- $path := .RelPermalink -}}
+{{- $destinationPath := $path -}}
+{{- if eq $path "/" -}}
+  {{- $destinationPath = "/" -}}
+{{- else if eq $path "/posts/" -}}
+  {{- $destinationPath = "/posts/" -}}
+{{- else if hasPrefix $path "/posts/" -}}
+  {{- $slug := strings.TrimSuffix (strings.TrimPrefix $path "/posts/") "/" -}}
+  {{- if or
+      (eq $slug "confirmation-bias")
+      (eq $slug "flywheel-effect")
+      (eq $slug "google-ucp-goes-live-the-search-to-checkout-era-begins")
+    -}}
+    {{- $destinationPath = printf "/en/posts/%s/" $slug -}}
+  {{- end -}}
+{{- end -}}
+{{- return (printf "https://stometa.dev%s" $destinationPath) -}}

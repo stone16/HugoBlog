@@ -1,3 +1,8 @@
+{{- $legacyDestination := partial "legacy-redirect-url.html" . -}}
+<aside class="legacy-redirect-fallback" style="margin:2rem auto;padding:1rem;max-width:48rem;border:1px solid currentColor">
+  This page has moved to <a href="{{ $legacyDestination }}">stometa.dev</a>.
+</aside>
+
 {{- /* Reading Progress Bar — single posts only */ -}}
 {{- if and (eq .Kind "page") (ne .Layout "archives") (ne .Layout "search") (ne .Layout "links") }}
 <div class="reading-progress" role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">

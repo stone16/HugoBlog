@@ -1,5 +1,8 @@
 {{- /* V4: Monochrome Design System — Fonts + Theme + Analytics */ -}}
 
+{{- /* Human navigation fallback for browsers that block meta refresh. */ -}}
+{{ partial "legacy-redirect.html" . }}
+
 {{- /* Preconnect */ -}}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

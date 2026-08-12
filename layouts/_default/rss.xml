@@ -1,0 +1,42 @@
+{{- $authorEmail := "" -}}
+{{- $authorName := "" -}}
+{{- with site.Params.author -}}
+  {{- if reflect.IsMap . -}}
+    {{- $authorName = .name -}}
+    {{- $authorEmail = .email -}}
+  {{- else -}}
+    {{- $authorName = . -}}
+  {{- end -}}
+{{- end -}}
+{{- $pctx := . -}}
+{{- if .IsHome }}{{ $pctx = site }}{{ end -}}
+{{- $pages := slice -}}
+{{- if or $.IsHome $.IsSection }}{{ $pages = $pctx.RegularPages }}{{ else }}{{ $pages = $pctx.Pages }}{{ end -}}
+{{- $limit := site.Config.Services.RSS.Limit -}}
+{{- if ge $limit 1 }}{{ $pages = $pages | first $limit }}{{ end -}}
+{{- $feedURL := "https://stometa.dev/index.xml" -}}
+{{- printf "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" | safeHTML }}
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>{{ site.Title }}</title>
+    <link>https://stometa.dev/</link>
+    <description>Recent content on {{ site.Title }}</description>
+    <generator>Hugo -- {{ hugo.Version }}</generator>
+    <language>{{ site.Language.LanguageCode }}</language>
+    {{- with .OutputFormats.Get "RSS" }}{{ printf "<atom:link href=%q rel=\"self\" type=%q />" $feedURL .MediaType | safeHTML }}{{ end -}}
+    {{- range $pages }}
+      {{- if and (ne .Layout `search`) (ne .Layout `archives`) }}
+      {{- $destination := partial "legacy-redirect-url.html" . }}
+      <item>
+        <title>{{ .Title }}</title>
+        <link>{{ $destination }}</link>
+        <pubDate>{{ .PublishDate.Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</pubDate>
+        {{- with $authorEmail }}<author>{{ . }}{{ with $authorName }} ({{ . }}){{ end }}</author>{{ end }}
+        <guid>{{ $destination }}</guid>
+        <description>{{ with .Description | html }}{{ . }}{{ else }}{{ .Summary | html }}{{ end -}}</description>
+        {{- if and site.Params.ShowFullTextinRSS .Content }}<content:encoded>{{ (printf "<![CDATA[%s]]>" .Content) | safeHTML }}</content:encoded>{{ end }}
+      </item>
+      {{- end }}
+    {{- end }}
+  </channel>
+</rss>
