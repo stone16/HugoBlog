@@ -21,6 +21,7 @@ cover:
   alt: OpenClaw sessions.json 性能优化：从 38MB 到 2.8MB
   relative: false
   hidden: false
+canonicalURL: "https://stometa.dev/posts/openclaw-sessions-json-performance-optimization/"
 ---
 
 ## 背景：Discord 大面积无响应

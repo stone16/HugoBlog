@@ -21,6 +21,7 @@ cover:
   alt: 从管理团队到管理 AI Agent：一个程序员的裸辞跑路思考
   relative: false
   hidden: false
+canonicalURL: "https://stometa.dev/posts/from-em-to-ai-agent-manager-career-reflection/"
 ---
 
 ## Core Idea

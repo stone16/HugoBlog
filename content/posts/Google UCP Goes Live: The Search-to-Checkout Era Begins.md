@@ -11,6 +11,7 @@ tags:
   - "seo"
   - "ucp"
 summary: "Google's Universal Commerce Protocol is now live in AI Mode, letting users buy from Etsy and Wayfair without leaving Search. What this means for DTC brands and indie merchants."
+canonicalURL: "https://stometa.dev/posts/google-ucp-goes-live%3A-the-search-to-checkout-era-begins/"
 ---
 
 Google VP Vidhya Srinivasan just announced that UCP-powered checkout is rolling out in AI Mode. US shoppers can now buy items from Etsy and Wayfair directly inside Google Search's AI Mode and the Gemini app. No redirect, no landing page — the transaction happens within Google's interface.

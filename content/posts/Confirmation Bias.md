@@ -4,6 +4,7 @@ date: 2025-02-02
 draft: false
 categories: ['General']
 tags: ['psychology', 'NoteTaking', '2ndBrain', 'humanPitfalls']
+canonicalURL: "https://stometa.dev/en/posts/confirmation-bias/"
 ---
 
 # Confirmation Bias
