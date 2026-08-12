@@ -32,7 +32,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      HUGO_VERSION: 0.146.0
+      # Must match the version the templates are developed against. 0.146 could not
+      # render layouts/partials/head.html: append onto an empty slice yields
+      # []interface{} there, which resources.Concat rejects. CI also checks out
+      # PaperMod master, which itself expects a recent Hugo.
+      HUGO_VERSION: 0.152.2
       HUGO_ENVIRONMENT: production
       TZ: Asia/Hong_Kong
     steps:
