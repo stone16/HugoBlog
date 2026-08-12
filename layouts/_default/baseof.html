@@ -1,0 +1,15 @@
+{{- if lt hugo.Version "0.146.0" }}{{ errorf "=> hugo v0.146.0 or greater is required to build" }}{{ end -}}
+<!DOCTYPE html>
+{{- $theme := site.Params.defaultTheme | default "auto" -}}
+<html lang="{{ site.Language }}" dir="{{ .Language.LanguageDirection | default "auto" }}" data-theme="{{ $theme }}">
+<head>{{ partial "head.html" . }}</head>
+<body{{ if (or (ne .Kind `page`) (eq .Layout `archives`) (eq .Layout `search`)) }} class="list"{{ end }} id="top">
+  {{ partialCached "header.html" . .Page }}
+  <main class="main">{{ block "main" . }}{{ end }}</main>
+  {{- $legacyDestination := partial "legacy-redirect-url.html" . -}}
+  <aside class="legacy-redirect-fallback" style="margin:2rem auto;padding:1rem;max-width:48rem;border:1px solid currentColor">
+    This page has moved to <a href="{{ $legacyDestination }}">stometa.dev</a>.
+  </aside>
+  {{ partialCached "footer.html" . .Layout .Kind (.Param "hideFooter") (.Param "ShowCodeCopyButtons") -}}
+</body>
+</html>
