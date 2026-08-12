@@ -1,4 +1,9 @@
-baseURL: "https://stometa.top"
+# This site is now a redirect layer. Pointing baseURL at stometa.dev makes every
+# .Permalink -- and therefore PaperMod's canonical, og:url and the feed -- resolve
+# to the new home, including generated list and taxonomy pages that have no
+# content file to carry a canonicalURL param. GitHub Pages still serves this at
+# stometa.top via CNAME; baseURL only affects generated URLs.
+baseURL: "https://stometa.dev"
 languageCode: "en-us"
 title: "Leilei Chen's Blog"
 theme: ["PaperMod"]
