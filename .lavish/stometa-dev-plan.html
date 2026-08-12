@@ -1,0 +1,851 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>stometa.dev — Platform Design</title>
+<style>
+  /* ── Editorial palette. Warm paper + ink + a single cinnabar accent.
+       Deliberately NOT the purple→cyan-on-blue-black look DESIGN.md specs,
+       which is the stock AI-product aesthetic. ────────────────────────── */
+  :root {
+    --paper:      #faf7f2;
+    --paper-2:    #f2ede4;
+    --paper-3:    #e9e2d5;
+    --ink:        #17150f;
+    --ink-2:      #4a453a;
+    --ink-3:      #7d766a;
+    --rule:       #d9d1c1;
+    --rule-soft:  #e6dfd2;
+    --accent:     #a8371a;
+    --accent-2:   #7a2a14;
+    --accent-bg:  #f6e6df;
+    --good:       #2f6b45;
+    --good-bg:    #e2efe6;
+    --warn:       #8a5a11;
+    --warn-bg:    #f7ecd6;
+    --bad:        #98301f;
+    --bad-bg:     #f7e2dd;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Songti SC", "Source Han Serif SC", "Noto Serif CJK SC", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    --measure: 74ch;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:     #15130f;
+      --paper-2:   #1d1a15;
+      --paper-3:   #262119;
+      --ink:       #f2ede3;
+      --ink-2:     #c0b8a8;
+      --ink-3:     #8b8375;
+      --rule:      #373126;
+      --rule-soft: #29241c;
+      --accent:    #e0764f;
+      --accent-2:  #f0a184;
+      --accent-bg: #33190f;
+      --good:      #7fc79a;
+      --good-bg:   #16281d;
+      --warn:      #d9a95c;
+      --warn-bg:   #2e2412;
+      --bad:       #e8836e;
+      --bad-bg:    #331813;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper:     #15130f;
+    --paper-2:   #1d1a15;
+    --paper-3:   #262119;
+    --ink:       #f2ede3;
+    --ink-2:     #c0b8a8;
+    --ink-3:     #8b8375;
+    --rule:      #373126;
+    --rule-soft: #29241c;
+    --accent:    #e0764f;
+    --accent-2:  #f0a184;
+    --accent-bg: #33190f;
+    --good:      #7fc79a;
+    --good-bg:   #16281d;
+    --warn:      #d9a95c;
+    --warn-bg:   #2e2412;
+    --bad:       #e8836e;
+    --bad-bg:    #331813;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  :where(.grid, .flex) > * { min-width: 0; }
+  :where(p, h1, h2, h3, h4, li, dd, blockquote, figcaption, td, th) { overflow-wrap: anywhere; }
+  :where(img, svg) { max-width: 100%; height: auto; }
+
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16.5px;
+    line-height: 1.72;
+    font-feature-settings: "kern" 1;
+  }
+
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px 120px; }
+
+  /* ── Masthead ─────────────────────────────────────────────────────── */
+  .masthead { border-bottom: 3px double var(--rule); padding: 56px 0 26px; margin-bottom: 8px; }
+  .kicker {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--accent); margin: 0 0 18px;
+  }
+  .masthead h1 {
+    font-family: var(--serif); font-weight: 600; font-size: clamp(2.4rem, 6vw, 4rem);
+    line-height: 1.05; letter-spacing: -.02em; margin: 0 0 16px;
+  }
+  .standfirst {
+    font-family: var(--serif); font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+    line-height: 1.6; color: var(--ink-2); max-width: 62ch; margin: 0 0 24px;
+  }
+  .dateline {
+    display: flex; flex-wrap: wrap; gap: 8px 22px;
+    font-family: var(--mono); font-size: 11.5px; color: var(--ink-3);
+    letter-spacing: .04em; padding-top: 14px; border-top: 1px solid var(--rule-soft);
+  }
+  .dateline b { color: var(--ink-2); font-weight: 600; }
+
+  /* ── Sections ─────────────────────────────────────────────────────── */
+  section { padding-top: 64px; }
+  .sec-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 6px; }
+  .sec-num {
+    font-family: var(--mono); font-size: 11px; color: var(--accent);
+    letter-spacing: .12em; flex: none; padding-top: 6px;
+  }
+  h2 {
+    font-family: var(--serif); font-weight: 600; font-size: clamp(1.6rem, 3.4vw, 2.15rem);
+    letter-spacing: -.015em; line-height: 1.2; margin: 0;
+  }
+  .sec-rule { height: 1px; background: var(--rule); margin: 18px 0 28px; }
+  h3 {
+    font-family: var(--sans); font-weight: 650; font-size: 1.02rem;
+    letter-spacing: .01em; margin: 40px 0 12px; color: var(--ink);
+  }
+  h3:first-child { margin-top: 0; }
+  p { margin: 0 0 18px; max-width: var(--measure); }
+  .lede { font-family: var(--serif); font-size: 1.16rem; line-height: 1.62; color: var(--ink-2); }
+  a { color: var(--accent); text-underline-offset: 3px; }
+  code {
+    font-family: var(--mono); font-size: .86em; background: var(--paper-2);
+    border: 1px solid var(--rule-soft); border-radius: 3px; padding: .1em .34em;
+  }
+  strong { font-weight: 650; }
+
+  /* ── Tables ───────────────────────────────────────────────────────── */
+  .tw { overflow-x: auto; border: 1px solid var(--rule); border-radius: 2px; background: var(--paper-2); margin: 0 0 22px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14.2px; min-width: 520px; }
+  th {
+    text-align: left; font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--ink-3); font-weight: 600;
+    padding: 12px 16px; border-bottom: 1px solid var(--rule); white-space: nowrap;
+    background: var(--paper-3);
+  }
+  td { padding: 13px 16px; border-bottom: 1px solid var(--rule-soft); vertical-align: top; line-height: 1.58; }
+  tr:last-child td { border-bottom: 0; }
+  td.num { font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); white-space: nowrap; }
+
+  .tag {
+    display: inline-block; font-family: var(--mono); font-size: 10px; letter-spacing: .08em;
+    text-transform: uppercase; padding: 3px 7px; border-radius: 2px; white-space: nowrap; font-weight: 600;
+  }
+  .t-keep { background: var(--good-bg); color: var(--good); }
+  .t-cut  { background: var(--bad-bg);  color: var(--bad); }
+  .t-warn { background: var(--warn-bg); color: var(--warn); }
+  .t-new  { background: var(--accent-bg); color: var(--accent-2); }
+
+  /* ── Callouts ─────────────────────────────────────────────────────── */
+  .note {
+    border-left: 3px solid var(--accent); background: var(--paper-2);
+    padding: 18px 22px; margin: 0 0 24px; border-radius: 0 2px 2px 0;
+  }
+  .note p:last-child { margin-bottom: 0; }
+  .note .nh {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--accent); margin: 0 0 8px; font-weight: 600;
+  }
+  .note.risk { border-left-color: var(--bad); }
+  .note.risk .nh { color: var(--bad); }
+
+  /* ── Decision cards ───────────────────────────────────────────────── */
+  .decisions { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px,100%), 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+  .dec { background: var(--paper); padding: 20px 22px; }
+  .dec .dnum { font-family: var(--mono); font-size: 10.5px; color: var(--accent); letter-spacing: .12em; }
+  .dec h4 { font-family: var(--sans); font-size: .96rem; font-weight: 650; margin: 8px 0 8px; line-height: 1.35; }
+  .dec p { font-size: 13.6px; color: var(--ink-2); margin: 0; line-height: 1.6; }
+  .dec .adr { font-family: var(--mono); font-size: 10px; color: var(--ink-3); margin-top: 10px; display: block; letter-spacing: .06em; }
+
+  /* ── Diagrams ─────────────────────────────────────────────────────── */
+  .mermaid { background: var(--paper-2); border: 1px solid var(--rule); padding: 20px 12px; margin: 0 0 12px; text-align: center; overflow-x: auto; }
+  figcaption { font-size: 13px; color: var(--ink-3); font-family: var(--mono); letter-spacing: .03em; margin-bottom: 26px; }
+  figure { margin: 0; }
+
+  /* ── Screenshot / mock comparison ─────────────────────────────────── */
+  .compare { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px,100%), 1fr)); gap: 26px; margin-bottom: 26px; }
+  .pane { border: 1px solid var(--rule); background: var(--paper-2); min-width: 0; }
+  .pane-hd {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .13em; text-transform: uppercase;
+    padding: 10px 14px; border-bottom: 1px solid var(--rule); color: var(--ink-3); font-weight: 600;
+    display: flex; justify-content: space-between; gap: 10px; align-items: center;
+  }
+  .shot { display: block; width: 100%; height: 360px; object-fit: cover; object-position: top center; }
+
+  /* mock of the proposed editorial index */
+  .mock { padding: 22px 20px; background: var(--paper); height: 360px; overflow: hidden; }
+  .mock-mast { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid var(--ink); padding-bottom: 8px; margin-bottom: 16px; gap: 12px; }
+  .mock-mast .mt { font-family: var(--serif); font-size: 20px; font-weight: 600; letter-spacing: -.01em; }
+  .mock-mast .ml { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: .1em; white-space: nowrap; }
+  .mock-sec { font-family: var(--mono); font-size: 9.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); margin: 16px 0 8px; display: flex; align-items: center; gap: 10px; }
+  .mock-sec::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
+  .mock-sec:first-of-type { margin-top: 0; }
+  .mock-feat { border-left: 2px solid var(--accent); padding-left: 14px; margin-bottom: 6px; }
+  .mock-feat .h { font-family: var(--serif); font-size: 19px; font-weight: 600; line-height: 1.25; margin-bottom: 5px; }
+  .mock-feat .d { font-size: 12.5px; color: var(--ink-2); line-height: 1.5; margin-bottom: 6px; }
+  .mock-row { padding: 9px 0; border-bottom: 1px solid var(--rule-soft); }
+  .mock-row .h { font-family: var(--serif); font-size: 15px; font-weight: 600; line-height: 1.3; margin-bottom: 3px; }
+  .mock-row .d { font-size: 11.5px; color: var(--ink-3); line-height: 1.45; }
+  .mock-meta { font-family: var(--mono); font-size: 9.5px; color: var(--ink-3); letter-spacing: .05em; }
+
+  /* ── Phases ───────────────────────────────────────────────────────── */
+  .phase { border-left: 2px solid var(--rule); padding: 0 0 4px 26px; margin-left: 6px; position: relative; }
+  .phase::before {
+    content: ""; position: absolute; left: -6px; top: 6px; width: 10px; height: 10px;
+    background: var(--accent); border-radius: 50%;
+  }
+  .phase + .phase { margin-top: 30px; }
+  .phase .pl { font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+  .phase h4 { font-family: var(--serif); font-size: 1.22rem; font-weight: 600; margin: 0 0 10px; }
+  .phase ul { margin: 0; padding-left: 18px; font-size: 14.4px; color: var(--ink-2); }
+  .phase li { margin-bottom: 5px; }
+  .gate { display: inline-block; margin-top: 10px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; background: var(--paper-3); border: 1px solid var(--rule); padding: 4px 9px; color: var(--ink-2); }
+
+  /* ── Questions ────────────────────────────────────────────────────── */
+  .q { border: 1px solid var(--rule); background: var(--paper-2); padding: 22px 24px; margin-bottom: 20px; }
+  .q .qh { font-family: var(--sans); font-weight: 650; font-size: 1rem; margin: 0 0 6px; display: flex; gap: 10px; align-items: baseline; }
+  .q .qn { font-family: var(--mono); font-size: 10.5px; color: var(--accent); letter-spacing: .1em; flex: none; }
+  .q .qwhy { font-size: 13.4px; color: var(--ink-3); margin: 0 0 14px; line-height: 1.55; max-width: var(--measure); }
+  .opts { display: flex; flex-direction: column; gap: 2px; margin-bottom: 14px; }
+  .opts label {
+    display: flex; gap: 11px; align-items: flex-start; padding: 9px 12px; cursor: pointer;
+    border: 1px solid transparent; border-radius: 2px; font-size: 14.2px; line-height: 1.5;
+  }
+  .opts label:hover { background: var(--paper-3); }
+  .opts input { margin: 5px 0 0; flex: none; accent-color: var(--accent); }
+  .opts .oh { font-weight: 600; }
+  .opts .od { color: var(--ink-3); font-size: 12.8px; display: block; }
+  .q textarea {
+    width: 100%; font-family: var(--sans); font-size: 14px; padding: 10px 12px;
+    border: 1px solid var(--rule); background: var(--paper); color: var(--ink);
+    border-radius: 2px; resize: vertical; line-height: 1.55;
+  }
+  .qbtn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+    background: var(--ink); color: var(--paper); border: 0; padding: 10px 18px;
+    border-radius: 2px; cursor: pointer; font-weight: 600;
+  }
+  .qbtn:hover { background: var(--accent); }
+  .qsent { font-family: var(--mono); font-size: 10.5px; color: var(--good); margin-left: 12px; letter-spacing: .06em; }
+
+  .foot { margin-top: 80px; padding-top: 24px; border-top: 3px double var(--rule); font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); letter-spacing: .04em; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <p class="kicker">Platform Design · Grilling Session Output</p>
+  <h1>stometa.dev</h1>
+  <p class="standfirst">Rebuilding a Hugo blog as a bilingual publication, a reader conversation, and a private artifact host — on TanStack Start, Cloudflare Workers and D1. Twelve decisions, all resolved.</p>
+  <div class="dateline">
+    <span><b>Date</b> 2026-08-11</span>
+    <span><b>Repo</b> stone16/HugoBlog → stone16/stometa-dev</span>
+    <span><b>Branch</b> stone16/hugo-improvement</span>
+    <span><b>Status</b> awaiting confirmation — no code written</span>
+  </div>
+</header>
+
+<section id="diagnosis">
+  <div class="sec-head"><span class="sec-num">01</span><h2>What's actually wrong</h2></div>
+  <div class="sec-rule"></div>
+
+  <p class="lede">You opened with “not look good, and not yet with great UI and post, knowledge.” Having read the repo, the live site and the git history: it doesn't look <em>bad</em> — it looks <strong>generic and unmaintained</strong>, and its posts are published by a machine with no review gate. Those are the two real problems. The platform rewrite is downstream of them.</p>
+
+  <div class="compare">
+    <div class="pane">
+      <div class="pane-hd"><span>Live today — stometa.top</span><span>screenshot</span></div>
+      <img class="shot" src="current-homepage.png" alt="Current stometa.top homepage: single-column minimal layout with a bare list of post titles and dates">
+    </div>
+    <div class="pane">
+      <div class="pane-hd"><span>Proposed — editorial direction</span><span>mock</span></div>
+      <div class="mock">
+        <div class="mock-mast"><span class="mt">Stometa</span><span class="ml">中文 / EN</span></div>
+        <div class="mock-sec">首选</div>
+        <div class="mock-feat">
+          <div class="h">拆解 X 的 For You 推荐算法</div>
+          <div class="d">从开源代码反推排序逻辑、候选生成与重排层，以及它对创作者意味着什么。</div>
+          <div class="mock-meta">2026年5月 · 42 分钟 · 算法</div>
+        </div>
+        <div class="mock-sec">工程实践</div>
+        <div class="mock-row">
+          <div class="h">企业级 Background Agent 实践</div>
+          <div class="d">MicroVM 沙箱、Blueprint 混合编排与 shift-left 反馈循环 <span class="mock-meta">· 18 分钟</span></div>
+        </div>
+        <div class="mock-row">
+          <div class="h">用 Cloudflare + Resend 打造无限邮箱</div>
+          <div class="d">一人公司的邮件基础设施，年成本 $10 <span class="mock-meta">· 9 分钟</span></div>
+        </div>
+        <div class="mock-sec">量化</div>
+        <div class="mock-row">
+          <div class="h">资金费率</div>
+          <div class="d">永续合约价格收敛机制与套利含义 <span class="mock-meta">· 7 分钟</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th style="width:30%">Defect</th><th>Evidence in the repo</th></tr></thead>
+      <tbody>
+        <tr><td><strong>The index is not an invitation</strong></td><td>13 bare <em>title + date</em> rows. No excerpt, reading time, category or cover. A reader has no reason to choose any particular post.</td></tr>
+        <tr><td><strong>Your best work is invisible</strong></td><td><code>x-algorithm-for-you-feed-deep-dive.md</code> is 1,319 lines. <code>Confirmation Bias.md</code> is 18. They render identically.</td></tr>
+        <tr><td><strong>No publish gate</strong></td><td>12 of the last 16 post commits are tagged <code>[nexus:&lt;uuid&gt;]</code> — published autonomously, straight to live. The log contains <code>chore: remove duplicate post (publish race condition)</code> and a same-day <code>Revert</code>.</td></tr>
+        <tr><td><strong>Comments exist but nobody can use them</strong></td><td>Giscus is fully wired at <code>layouts/partials/comments.html:15</code>. GitHub GraphQL reports <code>discussions.totalCount: 0</code>. It demands a GitHub account and an OAuth grant before a reader can type one character.</td></tr>
+        <tr><td><strong>Language mix reads as neglect</strong></td><td>10 zh + 4 en interleaved in one flat <code>/posts/</code>. <code>hugo.yaml:3</code> declares <code>languageCode: en-us</code>. There is no i18n config at all.</td></tr>
+        <tr><td><strong>The design doc describes a site that doesn't exist</strong></td><td><code>DESIGN.md</code> specs a <code>#08080f</code> dark purple→cyan gradient system. <code>hugo.yaml:24</code> ships <code>defaultTheme: light</code>. The live site is white and flat.</td></tr>
+        <tr><td><strong>Stale surface</strong></td><td>Footer reads <code>© 2025</code>. “Projects” lists <strong>stometa.top</strong> as a project — which this migration deletes.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <p class="nh">The reframe</p>
+    <p>Three of the four things you proposed are infrastructure. But the credibility problem is <strong>editorial hierarchy plus a review gate</strong>. The rewrite is still worth doing — it is what makes the admin, the artifacts and first-party comments possible — but it is not, by itself, the fix.</p>
+  </div>
+</section>
+
+<section id="decisions">
+  <div class="sec-head"><span class="sec-num">02</span><h2>The twelve decisions</h2></div>
+  <div class="sec-rule"></div>
+  <p>Each was chosen against a named constraint that ruled out the alternatives. Nine are recorded as ADRs in <code>docs/adr/</code>, currently <code>status: proposed</code> — they flip to <code>accepted</code> on your confirmation.</p>
+
+  <div class="decisions">
+    <div class="dec"><span class="dnum">D01</span><h4>D1 is the sole source of truth for Posts</h4><p>No git mirror. Keeping git authoritative would mean rewriting the posts module, editor and taxonomy of the very template adopted to avoid that work. Time Travel gives 30-day restore.</p><span class="adr">ADR-0001</span></div>
+    <div class="dec"><span class="dnum">D02</span><h4>Revisions are mandatory, not optional</h4><p>Leaving git forfeits diff review of what was published. Every write appends a revision row; the editor shows a diff and restores in one click.</p><span class="adr">ADR-0001 · consequence</span></div>
+    <div class="dec"><span class="dnum">D03</span><h4>One Locale per Post, optional Translation Group</h4><p>Full parity was rejected: it makes every post a permanent 2× writing commitment, and thin machine translation is a negative quality signal on an authority play.</p><span class="adr">ADR-0002</span></div>
+    <div class="dec"><span class="dnum">D04</span><h4>Artifacts at <code>&lt;slug&gt;.stometa.dev</code></h4><p>Brand coherence chosen over the stronger isolation a second registrable domain would give. Defensible only with the four browser-enforced controls in section 04.</p><span class="adr">ADR-0003</span></div>
+    <div class="dec"><span class="dnum">D05</span><h4>First-party Comments replace Giscus</h4><p>Anonymous + Turnstile; first comment held, then the commenter is trusted. Turnstile over reCAPTCHA because it is reachable from mainland China. Nothing to migrate.</p><span class="adr">ADR-0004</span></div>
+    <div class="dec"><span class="dnum">D06</span><h4>Address decoupled from access</h4><p>A memorable Slug is a guessable Slug, so the name can't be the lock. <code>visibility</code> changes freely without breaking a sent link. Defaults to <code>password</code> + <code>noindex</code>.</p><span class="adr">ADR-0005</span></div>
+    <div class="dec"><span class="dnum">D07</span><h4>Hard fork of ShipAny, no upstream</h4><p>~60% of the template is SaaS machinery a blog never runs. The first schema change touches <code>posts</code> — the table upstream owns — so every future merge conflicts for no benefit.</p><span class="adr">ADR-0006</span></div>
+    <div class="dec"><span class="dnum">D08</span><h4>Nexus is retired; posts are hand-written</h4><p>The requirement was “in my own words.” The autonomous publisher is the mechanism that produced the quality being fixed. <strong>Silence, not bad writing, is this decision's failure mode.</strong></p><span class="adr">ADR-0007</span></div>
+    <div class="dec"><span class="dnum">D09</span><h4>Markdown storage; rich mode must prove itself</h4><p>Both editors offered per post. Toggling to rich mode runs the round-trip and <strong>blocks</strong> unless the result is byte-identical, showing the diff it would have caused.</p><span class="adr">ADR-0008</span></div>
+    <div class="dec"><span class="dnum">D10</span><h4>Chinese at the root, English at <code>/en</code></h4><p>Inverts the template default. Old paths survive byte-for-byte, so migration is one bulk 301 plus four hand rules — and the majority language gets the shortest URL.</p><span class="adr">ADR-0009 · consequence</span></div>
+    <div class="dec"><span class="dnum">D11</span><h4>Editorial publication, not dark-gradient</h4><p>“Authority” is what editorial design encodes. The <code>DESIGN.md</code> palette is retired — ShipAny's own design skill v2 commit literally reads <em>“ban dark-gradient-glow cliches.”</em></p><span class="adr">—</span></div>
+    <div class="dec"><span class="dnum">D12</span><h4>One cutover, behind continuous staging</h4><p>Both costs of big-bang are structurally removed: Hugo keeps publishing throughout, and the finished app runs on a private staging host from week one.</p><span class="adr">ADR-0009</span></div>
+  </div>
+</section>
+
+
+<section id="verification">
+  <div class="sec-head"><span class="sec-num">02b</span><h2>Verification — four of my claims were wrong</h2></div>
+  <div class="sec-rule"></div>
+  <p class="lede">Four Codex workers were dispatched under Orca orchestration to attack the claims above rather than confirm them. They found five errors, two of which damage decisions you already made. Every verdict below was re-checked against primary sources or the source tree before being written here.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th style="width:9%">Verdict</th><th style="width:31%">What I told you</th><th>What is actually true</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tag t-cut">Wrong</span></td><td>“~60% of ShipAny is SaaS machinery a blog never runs.”</td><td>The six modules are <strong>1,735 of 64,940 lines in <code>src</code> — 2.67%</strong>; 8.47% including their 26 feature routes. I re-ran the counts: 626+297+101+221+337+153 = 1,735. The strip is still right, but for <em>attack surface</em>, not code volume.</td></tr>
+        <tr><td><span class="tag t-cut">Wrong</span></td><td>“Those modules are cleanly removable.”</td><td>Real coupling: <code>api/user/info.ts:18-28</code> gates on <code>getUserPlan</code>; <code>sign-up.tsx:126-151</code> has an invite branch; <code>admin/users.tsx</code> embeds credit-grant UI; <code>init-rbac.ts:126-158</code> seeds their permissions; <strong>all four</strong> schema variants define the tables.</td></tr>
+        <tr><td><span class="tag t-cut">Wrong</span></td><td>“Turnstile, chosen because it is reachable from mainland China.”</td><td><strong>Cloudflare documents the opposite:</strong> “Turnstile is not supported in Mainland China.” I fetched the page myself to confirm. Turnstile was picked <em>solely</em> on that premise, so <strong>ADR-0004 is void and reopened</strong> — see Q6.</td></tr>
+        <tr><td><span class="tag t-cut">Wrong</span></td><td>“D1 Time Travel gives 30-day restore.”</td><td><strong>7 days on Workers Free</strong>; 30 days only on Paid. The export command I quoted was also not executable — it needs the database name and <code>--output</code>.</td></tr>
+        <tr><td><span class="tag t-cut">Wrong</span></td><td>“The round-trip degrades fenced code blocks.”</td><td>Tested against the real markdown-it/turndown configs: <strong>fenced code with a language hint survives unchanged. Tables are destroyed</strong> — turndown emits plain paragraphs, on the first save, not gradually.</td></tr>
+        <tr><td><span class="tag t-warn">New</span></td><td>—</td><td><strong>Workers Free caps CPU at 10 ms/request</strong>, and Cloudflare places auth/SSR work at 10–20 ms. This design should budget <strong>Workers Paid, $5/mo</strong>. That also restores 30-day Time Travel, repairing the row above.</td></tr>
+        <tr><td><span class="tag t-warn">New</span></td><td>—</td><td>A <code>*.stometa.dev/*</code> route <strong>does not match the apex</strong> — “if a route pattern hostname begins with <code>*.</code>, it only matches all subhosts.” A separate <code>stometa.dev/*</code> route is required.</td></tr>
+        <tr><td><span class="tag t-warn">New</span></td><td>—</td><td><strong>Your flagship post is not markdown.</strong> <code>x-algorithm-for-you-feed-deep-dive.md</code> opens a raw <code>&lt;style&gt;</code> block at line 21, holds <strong>299 HTML tags</strong>, imports Google Fonts in-body, and carries its own palette (<code>--primary:#ff385c</code>). It renders only because <code>goldmark.renderer.unsafe: true</code>.</td></tr>
+        <tr><td><span class="tag t-keep">Holds</span></td><td>Slugs preserve byte-for-byte; markdown is already the storage format; Chinese-at-root is cheap; the <code>__Host-</code> + Origin threat model.</td><td>Confirmed. Locale inversion is two edits: <code>project.inlang/settings.json:3</code> and the <code>urlPatterns</code> block at <code>vite.config.ts:70-99</code>. No duplicate slugs; all 14 posts build.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note risk">
+    <p class="nh">What this costs you</p>
+    <p>Migration is <strong>not</strong> a pure lift-and-shift. Six posts have no slug, five have no description, one has neither category nor tags, <code>tags</code> has no column in the proposed schema at all, and the flagship needs either a sanitised HTML renderer or a markdown rewrite. Full detail in <code>docs/designs/stometa-dev/post-migration-map.md</code>.</p>
+  </div>
+</section>
+
+<section id="architecture">
+  <div class="sec-head"><span class="sec-num">03</span><h2>How it fits together</h2></div>
+  <div class="sec-rule"></div>
+  <p>One Worker application, two request personalities: the apex serves the publication and the authenticated admin; the wildcard serves untrusted artifact HTML and shares nothing but the database.</p>
+
+  <figure>
+    <pre class="mermaid">
+flowchart TD
+  A["Reader"] --> B["stometa.dev<br/>zh at root · /en prefixed"]
+  Z["Recipient of a shared link"] --> C["&lt;slug&gt;.stometa.dev<br/>artifact origin"]
+  Y["Stometa"] --> D["stometa.dev/admin<br/>__Host- session cookie"]
+
+  B --> W["TanStack Start on Workers"]
+  C --> W
+  D --> W
+
+  W --> E[("D1<br/>posts · revisions · comments · artifacts")]
+  W --> F[("R2<br/>artifact bytes")]
+  W --> G["Turnstile<br/>bot check"]
+
+  H["stometa.top<br/>Hugo · GitHub Pages"] -. "301 at cutover" .-> B
+
+  classDef trust fill:#e2efe6,stroke:#2f6b45,color:#17150f
+  classDef untrust fill:#f7e2dd,stroke:#98301f,color:#17150f
+  classDef legacy fill:#f7ecd6,stroke:#8a5a11,color:#17150f
+  class B,D trust
+  class C untrust
+  class H legacy
+    </pre>
+    <figcaption>Green = trusted origin · red = runs arbitrary third-party JavaScript · amber = legacy, retired at cutover.</figcaption>
+  </figure>
+
+  <h3>The data model</h3>
+  <figure>
+    <pre class="mermaid">
+erDiagram
+  POST ||--o{ REVISION : "appends on every write"
+  POST ||--o{ COMMENT : "receives"
+  POST }o--o| TRANSLATION_GROUP : "optionally pairs with"
+  POST }o--|| CATEGORY : "filed under"
+  COMMENTER ||--o{ COMMENT : "writes"
+  ARTIFACT ||--|| VISIBILITY_RULE : "governed by"
+
+  POST {
+    text slug PK
+    text locale "zh or en"
+    text title
+    text body_markdown
+    text status "draft or published"
+    text editor_mode "markdown or rich"
+    int  translation_group_id "nullable"
+  }
+  REVISION {
+    int  id PK
+    text body_markdown
+    text created_at
+  }
+  COMMENT {
+    int  id PK
+    text status "pending approved spam"
+    text body
+  }
+  COMMENTER {
+    text display_name
+    bool trusted "true after first approval"
+  }
+  ARTIFACT {
+    text slug PK "subdomain label"
+    text kind "html or pdf"
+    text r2_key
+    text update_key "secret"
+  }
+  VISIBILITY_RULE {
+    text visibility "public password invited"
+    bool noindex
+  }
+    </pre>
+    <figcaption>Artifacts share the database but nothing else with Posts — no feed, no Locale, no Comments.</figcaption>
+  </figure>
+
+  <h3>Publishing and conversation</h3>
+  <figure>
+    <pre class="mermaid">
+sequenceDiagram
+  actor S as Stometa
+  participant AD as Admin
+  participant D as D1
+  actor R as Reader
+  participant T as Turnstile
+
+  S->>AD: write in markdown editor
+  AD->>D: save → append REVISION
+  Note over AD,D: toggling to rich mode first<br/>round-trips and BLOCKS if lossy
+  S->>AD: publish
+  AD->>D: status = published
+
+  R->>D: read post
+  R->>T: submit comment
+  T-->>R: challenge passes
+  R->>D: COMMENT status = pending
+  D-->>AD: moderation queue
+  S->>AD: approve + reply
+  AD->>D: commenter.trusted = true
+  Note over R,D: their next comment publishes immediately
+    </pre>
+    <figcaption>Nexus appears nowhere in this diagram. That is the point of D08.</figcaption>
+  </figure>
+</section>
+
+<section id="security">
+  <div class="sec-head"><span class="sec-num">04</span><h2>The four controls that make D04 safe</h2></div>
+  <div class="sec-rule"></div>
+  <p>You chose one brand domain over two registrable domains. That is a real trade, and it holds only because these are enforced by the browser rather than by remembering to be careful. <strong>Drop any one and the decision stops being defensible.</strong></p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th style="width:26%">Control</th><th>Why it cannot be quietly misconfigured</th></tr></thead>
+      <tbody>
+        <tr><td><code>__Host-</code> session cookie prefix</td><td>Browsers <strong>reject</strong> a <code>__Host-</code> cookie that carries a <code>Domain</code> attribute. Host-only scoping becomes structurally impossible to get wrong, rather than a config line someone edits later.</td></tr>
+        <tr><td><code>Origin</code> allowlist on mutating routes</td><td>The <code>Origin</code> header is set by the browser and cannot be forged from script. One middleware rejecting anything ≠ <code>https://stometa.dev</code> closes the cross-subdomain request path outright.</td></tr>
+        <tr><td><code>connect-src 'self'</code> CSP on artifacts</td><td>Lavish artifacts are self-contained by design, so this costs them nothing while blocking calls back to the apex API.</td></tr>
+        <tr><td>Reserved slug list</td><td><code>www · api · admin · mail · staging · _dmarc</code> and friends must never be claimable, or an artifact can impersonate infrastructure.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note risk">
+    <p class="nh">Residual risk, stated plainly</p>
+    <p>Subdomains of <code>stometa.dev</code> are a different <em>origin</em> but the same <em>site</em>. Origin isolation stops DOM and <code>localStorage</code> access; it does not stop <code>SameSite=Lax</code> cookies riding along. The controls above are what close that gap. If you ever open artifact publishing to other people, revisit ADR-0003 before you do — not after.</p>
+  </div>
+</section>
+
+<section id="template">
+  <div class="sec-head"><span class="sec-num">05</span><h2>Verdict on the ShipAny template</h2></div>
+  <div class="sec-rule"></div>
+  <p><strong>A good candidate — stripped.</strong> Your checkout at <code>~/dev/shipany-tanstack</code> is 0 commits ahead and 0 behind upstream: a pristine template, not a customised project. It describes itself as “a headless SaaS engine”, and that is exactly the problem and the opportunity.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th style="width:15%">Verdict</th><th style="width:32%">Module</th><th>Reason</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tag t-keep">Keep</span></td><td><code>core/i18n</code> + paraglide zh/en</td><td>Locale routing already built. Only the default locale flips (D10).</td></tr>
+        <tr><td><span class="tag t-keep">Keep</span></td><td><code>modules/posts</code> · <code>modules/taxonomy</code></td><td>Storage format is <em>already markdown</em> — <code>rich-text-editor.tsx:2</code>. The 14 existing posts migrate as-is.</td></tr>
+        <tr><td><span class="tag t-keep">Keep</span></td><td><code>routes/admin/*</code></td><td>Grouped sidebar, status tabs, category selector. The shell you'd otherwise rebuild.</td></tr>
+        <tr><td><span class="tag t-keep">Keep</span></td><td><code>core/auth</code> (better-auth) · <code>modules/rbac</code></td><td>Hand-rolled auth is the one thing worth never doing.</td></tr>
+        <tr><td><span class="tag t-keep">Keep</span></td><td><code>modules/apikeys</code></td><td>Becomes the CLI upload credential for artifacts.</td></tr>
+        <tr><td><span class="tag t-keep">Keep</span></td><td><code>core/storage/r2.ts</code> · <code>core/db/d1.ts</code></td><td>Artifact bytes and the database binding. Cloudflare path is pre-wired in <code>wrangler.example.jsonc</code>.</td></tr>
+        <tr><td><span class="tag t-cut">Delete</span></td><td><code>modules/payment</code></td><td>Stripe, PayPal, Alipay, WeChat Pay — four providers, live webhook endpoints, zero use.</td></tr>
+        <tr><td><span class="tag t-cut">Delete</span></td><td><code>modules/credits</code> · <code>modules/subscriptions</code></td><td>FIFO ledger, expiry, auto-grant, subscription state. Pure liability on a blog.</td></tr>
+        <tr><td><span class="tag t-cut">Delete</span></td><td><code>modules/invite-codes</code> · <code>modules/tickets</code> · <code>modules/ai-tasks</code></td><td>Each ships live API routes and tables. Attack surface with no upside.</td></tr>
+        <tr><td><span class="tag t-new">Build</span></td><td><code>modules/comments</code> · <code>modules/artifacts</code> · post revisions</td><td>The three things the template does not have.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="editorial">
+  <div class="sec-head"><span class="sec-num">06</span><h2>The part that actually fixes credibility</h2></div>
+  <div class="sec-rule"></div>
+  <p class="lede">Everything above is plumbing. This section is the one that changes whether a stranger takes you seriously — and none of it requires the rewrite to land first.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th style="width:30%">Move</th><th>What it does</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Promote one flagship</strong></td><td>The X-algorithm deep dive is 1,319 lines of original analysis. It gets a featured slot with an excerpt, not row nine of a list. A visitor's first impression becomes your best work instead of your most recent.</td></tr>
+        <tr><td><strong>Group by theme, not by date</strong></td><td>工程实践 · 量化 · AI 工具 · 随笔. Four small curated shelves read as a body of work; fourteen reverse-chronological rows read as a dormant feed.</td></tr>
+        <tr><td><strong>Excerpt + reading time on every row</strong></td><td>The single highest-leverage change. Right now nothing distinguishes a 42-minute analysis from an 18-line note.</td></tr>
+        <tr><td><strong>CJK-first type stack</strong></td><td>Line-height ~1.75, deliberate <code>PingFang SC / Noto Sans CJK SC</code> fallbacks, no letter-spacing on 汉字. Most beautiful Western templates render Chinese badly; a zh-majority site must choose this rather than inherit it.</td></tr>
+        <tr><td><strong>One accent colour, no gradients</strong></td><td>A restrained cinnabar against warm paper — this page is rendered in the proposed system, so you are reading the proposal, not a description of it.</td></tr>
+        <tr><td><strong>Retire <code>DESIGN.md</code> V3</strong></td><td>The purple→cyan-on-near-black palette is the stock AI-product look. On a credibility play it works against you.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="plan">
+  <div class="sec-head"><span class="sec-num">07</span><h2>Build order</h2></div>
+  <div class="sec-rule"></div>
+  <p>You chose a single cutover. The Hugo site serves <code>stometa.top</code> untouched through every phase below, and the new app is deployed to a password-protected <code>noindex</code> staging host from phase 1 onward — so the cutover is a DNS change against a system that has been running for weeks, not a launch.</p>
+
+  <div class="phase">
+    <div class="pl">Phase 0 · Foundation</div>
+    <h4>Domain and skeleton</h4>
+    <ul>
+      <li>Acquire <code>stometa.dev</code>, nameservers to Cloudflare, wildcard <code>*.stometa.dev</code> proxied</li>
+      <li>Fork ShipAny → <code>stone16/stometa-dev</code>; first commit deletes payment, credits, subscriptions, invite-codes, tickets, ai-tasks; drop the <code>upstream</code> remote</li>
+      <li>D1 + R2 provisioned, <code>wrangler.jsonc</code> from the example, <code>pnpm cf:deploy</code> proven end to end</li>
+      <li><code>staging.stometa.dev</code> live, password-gated, <code>noindex</code></li>
+    </ul>
+    <span class="gate">Gate: a deployed page loads from D1 on the staging host</span>
+  </div>
+
+  <div class="phase">
+    <div class="pl">Phase 1 · Publication</div>
+    <h4>Content, schema, editorial design</h4>
+    <ul>
+      <li>Schema: <code>locale</code>, <code>translation_group_id</code>, <code>revisions</code>, <code>editor_mode</code></li>
+      <li>Invert locale routing — zh at root, <code>/en</code> prefixed; slugs preserved byte-for-byte</li>
+      <li>Import the 14 posts from <code>content/posts/*.md</code> with front-matter mapped to columns</li>
+      <li>Markdown editor + preview; rich mode behind the lossless round-trip gate</li>
+      <li>Editorial front page: featured slot, thematic shelves, excerpts, reading time, CJK type stack</li>
+      <li>RSS, sitemap, <code>hreflang</code> on Translation Group pairs</li>
+    </ul>
+    <span class="gate">Gate: every existing URL resolves on staging; a post survives 5 saves byte-identical</span>
+  </div>
+
+  <div class="phase">
+    <div class="pl">Phase 2 · Conversation and sharing</div>
+    <h4>Comments and artifacts</h4>
+    <ul>
+      <li>Comments: Turnstile, pending queue, trust-on-first-approval, admin reply</li>
+      <li>Artifacts: R2 upload via API key, <code>visibility</code> rule, update key, reserved-slug list</li>
+      <li>The four D04 controls — <code>__Host-</code> cookie, Origin allowlist, artifact CSP, reserved slugs</li>
+      <li><code>lavish-axi</code> publishing target pointed at stometa.dev instead of ht-ml.app</li>
+    </ul>
+    <span class="gate">Gate: an artifact on a subdomain provably cannot call an authenticated admin route</span>
+  </div>
+
+  <div class="phase">
+    <div class="pl">Phase 3 · Cutover</div>
+    <h4>One move</h4>
+    <ul>
+      <li>Migrate any posts published to Hugo during the build</li>
+      <li>DNS: <code>stometa.dev</code> apex to the Worker</li>
+      <li>Bulk 301 <code>stometa.top/*</code> → <code>stometa.dev/*</code>, plus 4 hand rules for the English posts</li>
+      <li>Dedicated 301 for <code>/index.xml</code> with the feed's self-<code>&lt;link&gt;</code> updated — <strong>miss this and every RSS subscriber goes quiet without telling you</strong></li>
+      <li>Re-point the GA4 data stream off <code>stometa.top</code>; submit the new sitemap to Search Console</li>
+      <li>Archive <code>stone16/HugoBlog</code> read-only</li>
+    </ul>
+    <span class="gate">Gate: old deep links resolve, feed readers follow, analytics continuous across the boundary</span>
+  </div>
+</section>
+
+<section id="risks">
+  <div class="sec-head"><span class="sec-num">08</span><h2>What could go wrong</h2></div>
+  <div class="sec-rule"></div>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th style="width:10%">Severity</th><th style="width:32%">Risk</th><th>Mitigation, or the honest absence of one</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="tag t-cut">High</span></td>
+          <td><strong>Silence.</strong> Nexus retired + a full rebuild = months of building and nothing published.</td>
+          <td>The historical record is real: hand-written posts ran Mar–Apr 2025, then nothing until August, then nothing until Nexus started in Feb 2026. Hugo staying live is a <em>capability</em>, not a mitigation — it only helps if you use it. <strong>This one is on you, not the architecture.</strong></td>
+        </tr>
+        <tr>
+          <td><span class="tag t-warn">Med</span></td>
+          <td>Same-site subdomain lets artifact JS reach the admin API</td>
+          <td>Fully closed by the four controls in section 04 — but only if all four ship. Treat them as one indivisible task.</td>
+        </tr>
+        <tr>
+          <td><span class="tag t-warn">Med</span></td>
+          <td>Round-trip corruption via an accidental rich-mode toggle</td>
+          <td>Blocked mechanically, not by discipline: the toggle refuses unless <code>md → html → md′</code> is byte-identical. Revisions cover the residue.</td>
+        </tr>
+        <tr>
+          <td><span class="tag t-warn">Med</span></td>
+          <td>SEO and subscriber loss at cutover</td>
+          <td>Slugs preserved byte-for-byte, so one bulk rule carries the link equity. The genuinely easy-to-forget items are the feed 301 and the GA4 stream.</td>
+        </tr>
+        <tr>
+          <td><span class="tag t-keep">Low</span></td>
+          <td>D1 loss takes years of writing with it</td>
+          <td>Time Travel gives 30-day point-in-time restore and <code>wrangler d1 export --remote</code> dumps on demand. Worth wiring the export into CI anyway — it is one line.</td>
+        </tr>
+        <tr>
+          <td><span class="tag t-keep">Low</span></td>
+          <td>Moderation queue becomes a chore you stop working</td>
+          <td>Trust-on-first-approval means the queue shrinks as your real readership stabilises. If it still nags, that is a signal to revisit ADR-0004, not to leave comments pending forever.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="open">
+  <div class="sec-head"><span class="sec-num">09</span><h2>Still open — seven things I need from you</h2></div>
+  <div class="sec-rule"></div>
+  <p>These are genuinely unresolved — Q6 and Q7 are new, forced by the verification results above. Pick or type, then queue each answer; they come back to me as separate prompts so nothing gets lost.</p>
+
+  <form class="q" data-lavish-question="success-metric" onsubmit="event.preventDefault();const f=new FormData(event.currentTarget);const c=f.get('metric');const n=(f.get('notes')||'').toString().trim();if(!c&&!n)return;window.lavish.queuePrompt('Success metric for stometa.dev: '+(c||'')+(n?' — '+n:''),{tag:'decision',text:'Success metric: '+(c||n),element:event.currentTarget,data:{question:'success-metric',answer:c,notes:n}});event.currentTarget.querySelector('.qsent').textContent='queued ✓';">
+    <p class="qh"><span class="qn">Q1</span>What makes you say, in six months, that this was worth it?</p>
+    <p class="qwhy">You never answered this one, and it is the only thing that tells us whether the plan succeeded. Every decision above optimises for something — I need to know for what.</p>
+    <div class="opts">
+      <label><input type="radio" name="metric" value="Inbound opportunities — people reach out because of something they read"><span><span class="oh">Inbound</span><span class="od">Strangers contact you about work, collaboration or ZentaStone because of a post.</span></span></label>
+      <label><input type="radio" name="metric" value="Cited as a reference — posts get linked and quoted by others"><span><span class="oh">Cited</span><span class="od">Your writing becomes something others link to when explaining a topic.</span></span></label>
+      <label><input type="radio" name="metric" value="Volume and consistency — a sustained publishing cadence"><span><span class="oh">Cadence</span><span class="od">30+ posts and a rhythm you actually kept. Directly in tension with retiring Nexus.</span></span></label>
+      <label><input type="radio" name="metric" value="Leverage for myself — a fast, private way to ship artifacts and think in public"><span><span class="oh">Leverage</span><span class="od">The tool serves you first; readership is a side effect.</span></span></label>
+    </div>
+    <textarea name="notes" rows="2" placeholder="Or describe it in your own words…"></textarea>
+    <div style="margin-top:12px"><button class="qbtn" type="submit">Queue this answer</button><span class="qsent"></span></div>
+  </form>
+
+  
+  <form class="q" data-lavish-question="bot-gate" onsubmit="event.preventDefault();const f=new FormData(event.currentTarget);const c=f.get('gate');const n=(f.get('notes')||'').toString().trim();if(!c&&!n)return;window.lavish.queuePrompt('Comment bot-gate replacement for Turnstile: '+(c||'')+(n?' - '+n:''),{tag:'decision',text:'Bot gate: '+(c||n),element:event.currentTarget,data:{question:'bot-gate',answer:c,notes:n}});event.currentTarget.querySelector('.qsent').textContent='queued OK';">
+    <p class="qh"><span class="qn">Q6</span>Turnstile is dead — what gates comments instead?</p>
+    <p class="qwhy">You chose “Anonymous + Turnstile, first comment moderated.” Cloudflare documents Turnstile as unsupported in Mainland China, so the half of that option doing the bot resistance does not work for your primary readership. The anonymous + moderation half is unaffected. This is a genuine re-decision, not a detail.</p>
+    <div class="opts">
+      <label><input type="radio" name="gate" value="rate limit + honeypot baseline, escalating to self-hosted ALTCHA proof-of-work"><span><span class="oh">Baseline + adaptive ALTCHA (Recommended)</span><span class="od">Rate limit and honeypot always on; a self-hosted proof-of-work challenge only when a submission looks risky. Fully first-party, so nothing to be blocked. No interaction for normal readers.</span></span></label>
+      <label><input type="radio" name="gate" value="rate limiting plus honeypot only, no challenge at all"><span><span class="oh">Rate limit + honeypot only</span><span class="od">Simplest, zero reader friction, entirely first-party. Weak against distributed or browser-driven bots — leans hard on your moderation queue.</span></span></label>
+      <label><input type="radio" name="gate" value="hCaptcha, accepting the third-party dependency"><span><span class="oh">hCaptcha</span><span class="od">Strongest managed bot resistance, but mandatory third-party endpoints with no primary-source mainland availability guarantee. Would need real multi-region testing first.</span></span></label>
+      <label><input type="radio" name="gate" value="keep Turnstile anyway and accept mainland readers may fail the check"><span><span class="oh">Turnstile anyway</span><span class="od">Accepts that some mainland readers may be unable to comment at all — which is how Giscus produced zero threads.</span></span></label>
+    </div>
+    <textarea name="notes" rows="2" placeholder="Or your own answer..."></textarea>
+    <div style="margin-top:12px"><button class="qbtn" type="submit">Queue this answer</button><span class="qsent"></span></div>
+  </form>
+
+  <form class="q" data-lavish-question="flagship-html" onsubmit="event.preventDefault();const f=new FormData(event.currentTarget);const c=f.get('fh');if(!c)return;window.lavish.queuePrompt('X-algorithm flagship post handling: '+c,{tag:'decision',text:'Flagship: '+c,element:event.currentTarget,data:{question:'flagship-html',answer:c}});event.currentTarget.querySelector('.qsent').textContent='queued OK';">
+    <p class="qh"><span class="qn">Q7</span>Your flagship post is raw HTML with its own design system</p>
+    <p class="qwhy">The X-algorithm deep dive is 299 HTML tags with an inline <code>&lt;style&gt;</code> block, an in-body Google Fonts import, and its own palette (<code>--primary:#ff385c</code>). It works today only because Hugo runs with <code>unsafe: true</code>. It is simultaneously your best work, my proposed featured post, and the thing that will clash hardest with the new editorial design.</p>
+    <div class="opts">
+      <label><input type="radio" name="fh" value="rewrite it as clean markdown, dropping its bespoke styling"><span><span class="oh">Rewrite as markdown (Recommended)</span><span class="od">The content is the value, not the CSS. It inherits the editorial design like everything else, and the schema stays honest.</span></span></label>
+      <label><input type="radio" name="fh" value="keep the HTML and add a sanitised HTML-capable renderer path"><span><span class="oh">Keep the HTML</span><span class="od">Preserves it exactly, but needs a sanitised renderer, an escape hatch in the schema, and it keeps a competing palette on your front page.</span></span></label>
+      <label><input type="radio" name="fh" value="keep the HTML but strip its style block and font import, mapping it onto the site design tokens"><span><span class="oh">Keep structure, strip styling</span><span class="od">Middle path: keep the tables and structure, delete the style block and font import, let site tokens take over.</span></span></label>
+    </div>
+    <div style="margin-top:12px"><button class="qbtn" type="submit">Queue this answer</button><span class="qsent"></span></div>
+  </form>
+
+  <form class="q" data-lavish-question="domain-status" onsubmit="event.preventDefault();const f=new FormData(event.currentTarget);const c=f.get('dom');if(!c)return;window.lavish.queuePrompt('stometa.dev domain status: '+c,{tag:'decision',text:'Domain: '+c,element:event.currentTarget,data:{question:'domain-status',answer:c}});event.currentTarget.querySelector('.qsent').textContent='queued ✓';">
+    <p class="qh"><span class="qn">Q2</span>Do you already own <code>stometa.dev</code>?</p>
+    <p class="qwhy">Phase 0 blocks on this, and <code>.dev</code> is on the HSTS preload list — it is HTTPS-only by force, so there is no http fallback to lean on during setup.</p>
+    <div class="opts">
+      <label><input type="radio" name="dom" value="already owned and on Cloudflare"><span><span class="oh">Owned, already on Cloudflare</span></span></label>
+      <label><input type="radio" name="dom" value="owned but registered elsewhere — needs nameserver move"><span><span class="oh">Owned elsewhere</span><span class="od">Needs a nameserver move to Cloudflare.</span></span></label>
+      <label><input type="radio" name="dom" value="not yet purchased"><span><span class="oh">Not yet bought</span><span class="od">Check availability before anything else in Phase 0.</span></span></label>
+    </div>
+    <div style="margin-top:12px"><button class="qbtn" type="submit">Queue this answer</button><span class="qsent"></span></div>
+  </form>
+
+  <form class="q" data-lavish-question="artifact-scope" onsubmit="event.preventDefault();const f=new FormData(event.currentTarget);const v=f.getAll('art').join('; ');const n=(f.get('notes')||'').toString().trim();if(!v&&!n)return;window.lavish.queuePrompt('Artifact scope decisions: '+v+(n?' — '+n:''),{tag:'scope',text:'Artifacts: '+(v||n),element:event.currentTarget,data:{question:'artifact-scope',answer:v,notes:n}});event.currentTarget.querySelector('.qsent').textContent='queued ✓';">
+    <p class="qh"><span class="qn">Q3</span>How far does artifact hosting go in v1?</p>
+    <p class="qwhy">You said “an HTML, or a PDF.” Those are different products: HTML is a page you serve, PDF is a file a browser either renders inline or downloads. Retention matters too — without it you accumulate a sprawl of stale pages you forgot are public. Tick everything in scope.</p>
+    <div class="opts">
+      <label><input type="checkbox" name="art" value="self-contained HTML pages"><span><span class="oh">HTML pages</span><span class="od">The lavish-axi output case. Definitely in.</span></span></label>
+      <label><input type="checkbox" name="art" value="PDF, rendered inline in the browser"><span><span class="oh">PDF</span><span class="od">Adds a viewer decision: inline render vs forced download.</span></span></label>
+      <label><input type="checkbox" name="art" value="optional expiry date per artifact"><span><span class="oh">Optional expiry</span><span class="od">Per-artifact TTL, with a last-viewed column in admin so you can prune.</span></span></label>
+      <label><input type="checkbox" name="art" value="view counts / access log per artifact"><span><span class="oh">View tracking</span><span class="od">Know whether the person you sent it to actually opened it.</span></span></label>
+      <label><input type="checkbox" name="art" value="'invited' visibility with named recipients"><span><span class="oh">Invited visibility now</span><span class="od">Named recipients rather than a shared password. Otherwise deferred.</span></span></label>
+    </div>
+    <textarea name="notes" rows="2" placeholder="Anything else an artifact must do…"></textarea>
+    <div style="margin-top:12px"><button class="qbtn" type="submit">Queue this answer</button><span class="qsent"></span></div>
+  </form>
+
+  <form class="q" data-lavish-question="carryover" onsubmit="event.preventDefault();const f=new FormData(event.currentTarget);const v=f.getAll('keep').join('; ');window.lavish.queuePrompt('Carry over from the Hugo site: '+(v||'nothing'),{tag:'scope',text:'Carry over: '+(v||'nothing'),element:event.currentTarget,data:{question:'carryover',answer:v}});event.currentTarget.querySelector('.qsent').textContent='queued ✓';">
+    <p class="qh"><span class="qn">Q4</span>Which existing features survive the move?</p>
+    <p class="qwhy">The Hugo site has pieces the template has no equivalent for. Each is real work that nobody has budgeted, and dropping them silently is how a migration quietly loses things.</p>
+    <div class="opts">
+      <label><input type="checkbox" name="keep" value="client-side search (currently a JSON index)"><span><span class="oh">Search</span><span class="od"><code>content/search.md</code> + a JSON index. On D1 this becomes a real query endpoint.</span></span></label>
+      <label><input type="checkbox" name="keep" value="the /links hub page"><span><span class="oh">Links hub</span><span class="od"><code>content/links.md</code> — your owned Linktree.</span></span></label>
+      <label><input type="checkbox" name="keep" value="the 'What I'm doing now' section (data/now.yaml)"><span><span class="oh">“Now” section</span><span class="od"><code>data/now.yaml</code>, currently stamped 2026-04-10.</span></span></label>
+      <label><input type="checkbox" name="keep" value="the projects directory (data/projects.yaml)"><span><span class="oh">Projects directory</span><span class="od"><code>data/projects.yaml</code> — note it lists stometa.top, which this migration deletes.</span></span></label>
+      <label><input type="checkbox" name="keep" value="the GitHub contributions graph (scripts/fetch-contributions.sh)"><span><span class="oh">Contributions graph</span><span class="od">Built at CI time today; needs a different mechanism on Workers.</span></span></label>
+      <label><input type="checkbox" name="keep" value="auto-generated per-post social cards (static/images/*/card1.png)"><span><span class="oh">Social cards</span><span class="od">Four card images per post exist today. Regenerating them needs a new pipeline.</span></span></label>
+    </div>
+    <div style="margin-top:12px"><button class="qbtn" type="submit">Queue this answer</button><span class="qsent"></span></div>
+  </form>
+
+  <form class="q" data-lavish-question="cadence" onsubmit="event.preventDefault();const f=new FormData(event.currentTarget);const c=f.get('cad');const n=(f.get('notes')||'').toString().trim();if(!c&&!n)return;window.lavish.queuePrompt('Cadence commitment against the D08 silence risk: '+(c||'')+(n?' — '+n:''),{tag:'risk',text:'Cadence: '+(c||n),element:event.currentTarget,data:{question:'cadence',answer:c,notes:n}});event.currentTarget.querySelector('.qsent').textContent='queued ✓';">
+    <p class="qh"><span class="qn">Q5</span>What stops the silence?</p>
+    <p class="qwhy">This is the one risk with no architectural fix. You retired the pipeline that produced 12 of your last 16 posts, and the hand-written era has two multi-month gaps in it. I would rather design against this now than discover it in November.</p>
+    <div class="opts">
+      <label><input type="radio" name="cad" value="keep publishing on Hugo throughout the build"><span><span class="oh">Publish on Hugo during the build</span><span class="od">Costs nothing, migrates at cutover. The cheapest possible insurance.</span></span></label>
+      <label><input type="radio" name="cad" value="bring Nexus back later as a drafter only, never a publisher"><span><span class="oh">Nexus returns as a drafter</span><span class="od">Reverses part of D08: it writes drafts, you publish. Research leverage without the voice loss.</span></span></label>
+      <label><input type="radio" name="cad" value="a scheduled-post queue in admin so a writing burst covers weeks"><span><span class="oh">Scheduled queue</span><span class="od">Write in bursts, publish on a drip. Needs a <code>publish_at</code> column.</span></span></label>
+      <label><input type="radio" name="cad" value="nothing structural — I accept the cadence risk"><span><span class="oh">Accept the risk</span><span class="od">Fine, but then it is named and on the record.</span></span></label>
+    </div>
+    <textarea name="notes" rows="2" placeholder="Or your own answer…"></textarea>
+    <div style="margin-top:12px"><button class="qbtn" type="submit">Queue this answer</button><span class="qsent"></span></div>
+  </form>
+</section>
+
+<section id="adrs">
+  <div class="sec-head"><span class="sec-num">10</span><h2>Written to the repo</h2></div>
+  <div class="sec-rule"></div>
+  <p>Nothing else has been touched — no code, no config, no content.</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th style="width:44%">File</th><th>Contents</th></tr></thead>
+      <tbody>
+        <tr><td><code>CONTEXT.md</code></td><td>Glossary: Post, Locale, Translation Group, Revision, Nexus, Comment, Commenter, Trusted Commenter, Moderation Queue, Artifact, Slug, Update Key, Admin — each with the wording to avoid.</td></tr>
+        <tr><td><code>docs/adr/0001-…-source-of-truth-for-posts.md</code></td><td>D1 sole source of truth; Revisions become mandatory as a consequence.</td></tr>
+        <tr><td><code>docs/adr/0002-one-locale-per-post….md</code></td><td>One Locale per Post; full parity rejected and why.</td></tr>
+        <tr><td><code>docs/adr/0003-artifacts-on-a-wildcard-subdomain….md</code></td><td>Brand domain over separate registrable domain; the four controls that make it hold.</td></tr>
+        <tr><td><code>docs/adr/0004-first-party-comments-replace-giscus.md</code></td><td>Giscus's zero-thread evidence; Turnstile over reCAPTCHA for mainland reachability.</td></tr>
+        <tr><td><code>docs/adr/0005-artifact-address-is-decoupled….md</code></td><td>Slug ≠ lock; the Universal SSL single-wildcard-level constraint.</td></tr>
+        <tr><td><code>docs/adr/0006-…-hard-fork-of-shipany….md</code></td><td>No upstream; why the security-patch counter-argument doesn't apply.</td></tr>
+        <tr><td><code>docs/adr/0007-posts-are-written-by-hand.md</code></td><td>Nexus retired; silence named explicitly as the failure mode this creates.</td></tr>
+        <tr><td><code>docs/adr/0008-markdown-is-the-storage-format….md</code></td><td>Rich mode refused rather than discouraged, via a round-trip equality check.</td></tr>
+        <tr><td><code>docs/adr/0009-single-cutover-behind-…-staging-host.md</code></td><td>Big-bang with both costs structurally removed; the cutover checklist.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note">
+    <p class="nh">Next</p>
+    <p>All nine ADRs are <code>status: proposed</code>. Answer the five questions above, annotate anything here you disagree with, and on your confirmation they flip to <code>accepted</code> and Phase 0 starts.</p>
+  </div>
+</section>
+
+<div class="foot">
+  stometa.dev platform design · produced by a /grilling session with /domain-modeling · 2026-08-11 · every claim above cites a file, a command output or a screenshot from this repo
+</div>
+
+</div>
+
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.esm.min.mjs";
+  const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+  const paint = document.createElement("canvas").getContext("2d");
+  function toRgba(color) {
+    paint.clearRect(0, 0, 1, 1);
+    paint.fillStyle = "#000";
+    paint.fillStyle = color;
+    paint.fillRect(0, 0, 1, 1);
+    return paint.getImageData(0, 0, 1, 1).data;
+  }
+  function compositeRgba(foreground, background) {
+    const fa = foreground[3] / 255, ba = background[3] / 255;
+    const alpha = fa + ba * (1 - fa);
+    if (alpha === 0) return [0, 0, 0, 0];
+    return [
+      (foreground[0]*fa + background[0]*ba*(1-fa))/alpha,
+      (foreground[1]*fa + background[1]*ba*(1-fa))/alpha,
+      (foreground[2]*fa + background[2]*ba*(1-fa))/alpha,
+      alpha * 255,
+    ];
+  }
+  function pageIsDark() {
+    const root = document.documentElement;
+    const rootBg = toRgba(getComputedStyle(root).backgroundColor);
+    const bodyBg = document.body ? toRgba(getComputedStyle(document.body).backgroundColor) : [0,0,0,0];
+    const [r,g,b,a] = compositeRgba(bodyBg, rootBg);
+    if (a > 0) return (0.2126*r + 0.7152*g + 0.0722*b) / 255 < 0.5;
+    const cs = getComputedStyle(root).colorScheme;
+    if (cs.includes("dark") && !cs.includes("light")) return true;
+    if (cs.includes("light") && !cs.includes("dark")) return false;
+    return darkQuery.matches;
+  }
+  const diagrams = [...document.querySelectorAll(".mermaid")].map((el) => ({ el, src: el.textContent }));
+  let applied, rendering = false, queued = false;
+  function queueRender() { queued = true; if (rendering) return; void render(); }
+  async function render() {
+    rendering = true;
+    try {
+      while (queued) {
+        queued = false;
+        const theme = pageIsDark() ? "dark" : "default";
+        if (theme === applied) continue;
+        mermaid.initialize({ startOnLoad: false, theme, securityLevel: "strict" });
+        for (const { el, src } of diagrams) { el.removeAttribute("data-processed"); el.textContent = src; }
+        try { await mermaid.run({ nodes: diagrams.map((d) => d.el) }); }
+        catch (error) { console.error("Mermaid diagram render failed:", error); return; }
+        applied = theme;
+      }
+    } finally { rendering = false; if (queued) queueRender(); }
+  }
+  if (document.readyState === "complete") queueRender();
+  else window.addEventListener("load", queueRender, { once: true });
+  const themeObserver = new MutationObserver(queueRender);
+  for (const el of [document.documentElement, document.body]) {
+    if (!el) continue;
+    themeObserver.observe(el, { attributes: true, attributeFilter: ["data-theme", "class", "style"] });
+  }
+  document.addEventListener("change", queueRender, true);
+  document.addEventListener("transitionend", ({ propertyName }) => { if (propertyName === "background-color") queueRender(); }, true);
+  darkQuery.addEventListener("change", queueRender);
+</script>
+</body>
+</html>

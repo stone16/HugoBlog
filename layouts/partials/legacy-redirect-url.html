@@ -11,7 +11,10 @@
 {{- else if eq $path "/posts/" -}}
   {{- $destinationPath = "/posts/" -}}
 {{- else if hasPrefix $path "/posts/" -}}
-  {{- $slug := strings.TrimSuffix (strings.TrimPrefix $path "/posts/") "/" -}}
+  {{- /* NOTE: Hugo reverses Go's argument order -- the prefix/suffix comes
+       FIRST, then the string. Writing it the Go way silently yields "/" and
+       every English post then falls through to a zh URL that 404s. */ -}}
+  {{- $slug := strings.TrimSuffix "/" (strings.TrimPrefix "/posts/" $path) -}}
   {{- if or
       (eq $slug "confirmation-bias")
       (eq $slug "flywheel-effect")
