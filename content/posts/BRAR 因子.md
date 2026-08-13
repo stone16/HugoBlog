@@ -4,7 +4,7 @@ date: 2025-03-04
 draft: false
 categories: ['Quant']
 tags: ['FactorAnalysis', 'quant', '能量型因子']
-canonicalURL: "https://stometa.dev/posts/brar-%E5%9B%A0%E5%AD%90/"
+canonicalURL: "https://stometa.dev/posts/brar-%E5%9B%A0%E5%AD%90"
 ---
 
 Categories: Quant

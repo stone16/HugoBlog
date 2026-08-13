@@ -17,7 +17,7 @@ tags:
 description: AI 写代码几秒就完成，人类审查却要几分钟。Conductor 用 Git Worktree 实现多 Agent 并发开发，从串行等待变为并行编排，重新定义
   AI 时代的开发工作流。
 slug: conductor-ai-concurrent-development-experience
-canonicalURL: "https://stometa.dev/posts/conductor-ai-concurrent-development-experience/"
+canonicalURL: "https://stometa.dev/posts/conductor-ai-concurrent-development-experience"
 ---
 
 ## AI 写代码很快，但人类成了瓶颈

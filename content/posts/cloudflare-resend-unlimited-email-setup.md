@@ -12,7 +12,7 @@ cover:
   alt: 用 Cloudflare + Resend 打造无限邮箱：一人公司的邮件基础设施
   relative: false
   hidden: false
-canonicalURL: "https://stometa.dev/posts/cloudflare-resend-unlimited-email-setup/"
+canonicalURL: "https://stometa.dev/posts/cloudflare-resend-unlimited-email-setup"
 ---
 
 ## Core Idea

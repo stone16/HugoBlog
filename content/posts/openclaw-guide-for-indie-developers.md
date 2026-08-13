@@ -20,7 +20,7 @@ cover:
   alt: OpenClaw 避坑指南：独立开发者的正确打开方式
   relative: false
   hidden: false
-canonicalURL: "https://stometa.dev/posts/openclaw-guide-for-indie-developers/"
+canonicalURL: "https://stometa.dev/posts/openclaw-guide-for-indie-developers"
 ---
 
 ## 先说你可能有的误区

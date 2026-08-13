@@ -4,7 +4,7 @@ date: 2025-03-27
 draft: false
 categories: ['General']
 tags: ['AgentAI', 'projectDevelopment']
-canonicalURL: "https://stometa.dev/posts/%E6%B0%9B%E5%9B%B4%E7%BC%96%E7%A8%8B-vibe-coding/"
+canonicalURL: "https://stometa.dev/posts/%E6%B0%9B%E5%9B%B4%E7%BC%96%E7%A8%8B-vibe-coding"
 ---
 
 # vibe coding
