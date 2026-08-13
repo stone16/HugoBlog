@@ -10,6 +10,8 @@
   {{- $destinationPath = "/" -}}
 {{- else if eq $path "/posts/" -}}
   {{- $destinationPath = "/posts/" -}}
+{{- else if hasPrefix $path "/posts/page/" -}}
+  {{- $destinationPath = "/posts/" -}}
 {{- else if hasPrefix $path "/posts/" -}}
   {{- /* NOTE: Hugo reverses Go's argument order -- the prefix/suffix comes
        FIRST, then the string. Writing it the Go way silently yields "/" and
