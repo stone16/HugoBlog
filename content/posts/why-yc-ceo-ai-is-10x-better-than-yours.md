@@ -22,7 +22,7 @@ cover:
   alt: 同样用Claude，为什么YC CEO的AI比你好用10倍
   relative: false
   hidden: false
-canonicalURL: "https://stometa.dev/posts/why-yc-ceo-ai-is-10x-better-than-yours/"
+canonicalURL: "https://stometa.dev/posts/why-yc-ceo-ai-is-10x-better-than-yours"
 ---
 
 ## 同样用 Claude，为什么 YC CEO 的 AI 比你好用 10 倍？

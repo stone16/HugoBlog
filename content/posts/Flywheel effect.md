@@ -4,7 +4,7 @@ date: 2025-02-10
 draft: false
 categories: ['General']
 tags: ['efficiencyBump', 'routine', 'psychology']
-canonicalURL: "https://stometa.dev/en/posts/flywheel-effect/"
+canonicalURL: "https://stometa.dev/en/posts/flywheel-effect"
 ---
 
 # Context

@@ -1,0 +1,13 @@
+{{- $destination := .Permalink -}}
+{{- if ne $destination "https://stometa.dev/" -}}
+  {{- $destination = strings.TrimSuffix "/" $destination -}}
+{{- end -}}
+<!DOCTYPE html>
+<html lang="{{ site.Language.LanguageCode }}">
+  <head>
+    <title>{{ $destination }}</title>
+    <link rel="canonical" href="{{ .Permalink }}">
+    <meta charset="utf-8">
+    <meta http-equiv="refresh" content="0; url={{ $destination }}">
+  </head>
+</html>

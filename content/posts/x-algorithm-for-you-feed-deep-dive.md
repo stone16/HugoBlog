@@ -15,7 +15,7 @@ tags:
 - 开源代码分析
 description: 基于 X 开源推荐算法代码库的逐行深度分析。覆盖完整 Pipeline、21 个评分维度、权重体系、流量池分层策略，以及面向不同体量博主的实操指南。
 slug: x-algorithm-for-you-feed-deep-dive
-canonicalURL: "https://stometa.dev/posts/x-algorithm-for-you-feed-deep-dive/"
+canonicalURL: "https://stometa.dev/posts/x-algorithm-for-you-feed-deep-dive"
 ---
 
 

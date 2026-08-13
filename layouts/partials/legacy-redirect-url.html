@@ -23,4 +23,7 @@
     {{- $destinationPath = printf "/en/posts/%s/" $slug -}}
   {{- end -}}
 {{- end -}}
+{{- if ne $destinationPath "/" -}}
+  {{- $destinationPath = strings.TrimSuffix "/" $destinationPath -}}
+{{- end -}}
 {{- return (printf "https://stometa.dev%s" $destinationPath) -}}
