@@ -1687,7 +1687,157 @@ code {
    RESPONSIVE
    ============================================================ */
 
+/* Keep the shared shell comfortable for touch and narrow authenticated
+   surfaces (archive/search/forms) as well as the public reading experience. */
+button,
+[role="button"],
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+:where(a, button, input, select, textarea):focus-visible {
+  outline: 3px solid var(--text);
+  outline-offset: 3px;
+}
+
+/* Long-form content should never widen the page or force horizontal body
+   scrolling. Data-heavy blocks remain usable with an intentional scroller. */
+.post-content {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.post-content pre,
+.post-content .highlight,
+.post-content table {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.post-content table {
+  display: block;
+  white-space: nowrap;
+}
+
+.post-content iframe,
+.post-content video,
+.post-content svg {
+  max-width: 100%;
+}
+
+/* Avoid nested 24px gutters from PaperMod's .main and our sections. */
+.main {
+  box-sizing: border-box;
+}
+
 @media (max-width: 768px) {
+  button,
+  [role="button"],
+  input,
+  select,
+  textarea,
+  .pagination a,
+  .top-link,
+  #menu a {
+    min-height: 44px;
+  }
+
+  .main {
+    padding-inline: 1rem;
+  }
+
+  .header .nav {
+    flex-wrap: nowrap;
+    min-width: 0;
+    padding-inline: 1rem;
+  }
+
+  .logo {
+    min-width: 0;
+    flex-shrink: 1;
+  }
+
+  .logo a {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 1.1rem;
+  }
+
+  #menu {
+    flex: 0 1 auto;
+    min-width: 0;
+    margin-inline: 0 0.25rem;
+    gap: 0.15rem;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+  }
+
+  #menu::-webkit-scrollbar { display: none; }
+
+  #menu li + li { margin-inline-start: 0.5rem; }
+
+  #menu a,
+  .lang-switch a,
+  button#theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .hero {
+    margin-top: 2.5rem;
+    padding-inline: 0;
+  }
+
+  .hero-social-link {
+    min-height: 44px;
+    padding-inline: 0.9rem;
+  }
+
+  .heatmap-section {
+    padding-inline: 0;
+  }
+
+  .heatmap-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .container {
+    padding-inline: 0;
+  }
+
+  .article-entry,
+  .project-entry {
+    align-items: flex-start;
+    min-height: 44px;
+    padding-block: 0.9rem;
+  }
+
+  .project-tech {
+    justify-content: flex-start;
+  }
+
+  .connect-card,
+  .links-card {
+    min-height: 56px;
+    box-sizing: border-box;
+  }
+
+  .pagination a {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .site-footer {
+    padding-inline: 0 !important;
+  }
+
   .ai-hero {
     margin-top: 2.5rem;
   }
@@ -1754,6 +1904,32 @@ code {
 }
 
 @media (max-width: 480px) {
+  .main {
+    padding-inline: 1rem;
+  }
+
+  .post-title {
+    font-size: clamp(1.5rem, 8vw, 2rem) !important;
+    line-height: 1.2;
+  }
+
+  .article-entry {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .article-date {
+    font-size: 0.7rem;
+  }
+
+  .project-tech-pill {
+    font-size: 0.65rem;
+  }
+
+  .links-page {
+    margin-block: 2.5rem;
+  }
+
   .ai-hero-divider { display: none; }
   .ai-hero-stat-num { font-size: 1.2rem; }
 
